@@ -366,15 +366,13 @@ Untracked files:
       <dl class="cmds">
         <dt><code>git add archivo</code></dt><dd>Prepara un archivo concreto.</dd>
         <dt><code>git add .</code></dt><dd>Prepara todos los cambios de la carpeta (también los borrados).</dd>
-        <dt><code>git add -p</code></dt><dd>Revisa y elige trozo a trozo qué preparar.</dd>
         <dt><code>git restore --staged archivo</code></dt><dd>Lo saca del staging (sin perder los cambios).</dd>
         <dt><code>git rm archivo</code></dt><dd>Borra el archivo y prepara el borrado.</dd>
-        <dt><code>git rm --cached archivo</code></dt><dd>Deja de seguirlo pero lo conserva en disco.</dd>
-        <dt><code>git mv viejo nuevo</code></dt><dd>Renombra o mueve y lo prepara.</dd>
       </dl>
       <div class="card">
         <h3>¿Por qué existe el staging?</h3>
-        <p>Te deja elegir <strong>qué entra en cada commit</strong>. Si has arreglado un bug y a la vez cambiado estilos, puedes hacer dos commits separados, cada uno con su explicación.</p>
+        <p>Te deja elegir <strong>qué entra en cada commit</strong>. Si has arreglado un bug y a la vez cambiado estilos, haces dos commits separados.</p>
+        <p style="margin-top:10px;color:var(--muted)">Con <code>git add -p</code> eliges incluso trozo a trozo.</p>
       </div>
     </div>
   </section>
@@ -558,20 +556,14 @@ a1b2c3d HEAD@{1}: commit: Corrige erratas de la conclusión</span>
         <p>Hay archivos que no queremos guardar: <strong>basura</strong> del sistema, archivos <strong>generados</strong> o <strong>secretos</strong>. Se listan en un archivo <code>.gitignore</code> en la raíz del repo y Git hace como si no existieran: nunca llegan al staging.</p>
         <div class="warn" style="margin-top:16px"><b>Secretos</b> Contraseñas, tokens y archivos <code>.env</code> siempre en el <code>.gitignore</code>. Lo que se sube a GitHub queda en el historial aunque luego lo borres.</div>
       </div>
-      <pre class="term"><span class="c"># Comentarios con almohadilla</span>
-<span class="c"># Un archivo concreto</span>
+      <pre class="term"><span class="c"># Un archivo concreto</span>
 .env
-
 <span class="c"># Por extensión</span>
 *.log
-
 <span class="c"># Una carpeta entera</span>
 node_modules/
-build/
-
 <span class="c"># En cualquier subcarpeta</span>
 **/.DS_Store
-
 <span class="c"># Excepción: este sí se sube</span>
 !importante.log</pre>
     </div>
@@ -785,13 +777,10 @@ build/
 **negrita** y *cursiva*
 
 - elemento de lista
-1. lista numerada
-
 [enlace](https://github.com)
 ![imagen](logo.png)
 
 `código en línea`
-
 - [ ] tarea pendiente
 - [x] tarea hecha</pre>
     </div>
