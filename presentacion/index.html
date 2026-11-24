@@ -592,6 +592,90 @@ build/
     <div class="tip"><b>Plantillas</b> GitHub ofrece <code>.gitignore</code> listos para cada lenguaje al crear un repo, y hay muchos más en <a href="https://github.com/github/gitignore">github.com/github/gitignore</a>.</div>
   </section>
 
+  <!-- ===================== 05 · RAMAS ===================== -->
+  <section class="slide divider">
+    <div class="num">05</div>
+    <h2>Gestión de ramas</h2>
+    <p class="lead">Desarrollar nuevas funciones sin tocar lo que ya funciona.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">05 · Ramas</div>
+    <h2>¿Qué es una rama?</h2>
+    <svg class="diagram" viewBox="0 0 1000 220" role="img" aria-label="Rama main con una rama nueva que sale de ella y vuelve a unirse con un merge">
+      <g stroke-width="4" fill="none">
+        <path d="M40 150 H960" stroke="#f05033"/>
+        <path d="M280 150 C 330 150, 330 60, 380 60 H640 C 690 60, 690 150, 740 150" stroke="#6cb4e4"/>
+      </g>
+      <g stroke="#14110f" stroke-width="4">
+        <circle cx="80"  cy="150" r="16" fill="#f05033"/>
+        <circle cx="200" cy="150" r="16" fill="#f05033"/>
+        <circle cx="280" cy="150" r="16" fill="#f05033"/>
+        <circle cx="520" cy="150" r="16" fill="#f05033"/>
+        <circle cx="740" cy="150" r="20" fill="#f7a541"/>
+        <circle cx="880" cy="150" r="16" fill="#f05033"/>
+        <circle cx="420" cy="60"  r="16" fill="#6cb4e4"/>
+        <circle cx="560" cy="60"  r="16" fill="#6cb4e4"/>
+      </g>
+      <g font-size="18" font-weight="700">
+        <text x="40" y="200" fill="#f05033">main</text>
+        <text x="430" y="28" fill="#6cb4e4">nueva-funcion</text>
+        <text x="700" y="205" fill="#f7a541">merge</text>
+      </g>
+    </svg>
+    <p>Una rama es una <strong>línea de desarrollo independiente</strong>. En <code>main</code> está la versión estable; cada función o arreglo se hace en su propia rama y, cuando está lista, se fusiona.</p>
+    <div class="note"><b>Por dentro</b> Una rama solo es una etiqueta que apunta a un commit. Crearla es instantáneo y no copia archivos.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">05 · Ramas</div>
+    <h2>Crear, cambiar, listar y borrar</h2>
+    <dl class="cmds">
+      <dt><code>git branch</code></dt><dd>Lista las ramas locales (<code>*</code> marca la actual). <code>-a</code> incluye las remotas.</dd>
+      <dt><code>git branch nombre</code></dt><dd>Crea una rama y te quedas en la actual.</dd>
+      <dt><code>git switch nombre</code></dt><dd>Cambia a esa rama (antes: <code>git checkout nombre</code>).</dd>
+      <dt><code>git switch -c nombre</code></dt><dd>La crea y te cambia a ella (antes: <code>git checkout -b nombre</code>).</dd>
+      <dt><code>git branch -m nuevo</code></dt><dd>Renombra la rama actual.</dd>
+      <dt><code>git branch -d nombre</code></dt><dd>Borra una rama ya fusionada (<code>-D</code> fuerza el borrado).</dd>
+    </dl>
+    <div class="tip"><b>Nombres</b> Usa nombres que expliquen la tarea: <code>feature/formulario-contacto</code>, <code>fix/menu-movil</code>, <code>docs/readme</code>.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">05 · Merge</div>
+    <h2>Fusionar ramas: <code>git merge</code></h2>
+    <pre class="term"><span class="c"># 1. Ve a la rama que va a RECIBIR los cambios</span>
+<span class="p">$</span> git switch main
+
+<span class="c"># 2. Trae los cambios de la otra rama</span>
+<span class="p">$</span> git merge nueva-funcion
+
+<span class="c"># 3. Si ya no la vas a usar, bórrala</span>
+<span class="p">$</span> git branch -d nueva-funcion</pre>
+    <div class="cols">
+      <div class="card"><h3>Fast-forward</h3><p>Si <code>main</code> no ha cambiado desde que creaste la rama, Git solo adelanta el puntero. No hay commit de merge.</p></div>
+      <div class="card"><h3>Merge de tres vías</h3><p>Si ambas ramas tienen commits nuevos, Git crea un <strong>commit de merge</strong> que une las dos historias.</p></div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">05 · Conflictos</div>
+    <h2>Conflictos de merge</h2>
+    <p>Ocurren cuando las dos ramas cambian <strong>las mismas líneas</strong> del mismo archivo. Git no adivina: te pregunta.</p>
+    <pre class="term"><span class="o">CONFLICT (content): Merge conflict in index.html</span>
+
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+&lt;h1&gt;Bienvenidos&lt;/h1&gt;           <span class="c">← tu versión (main)</span>
+=======
+&lt;h1&gt;Hola a todos&lt;/h1&gt;          <span class="c">← la versión de la otra rama</span>
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; nueva-funcion</pre>
+    <ol style="margin:0;padding-left:1.4em">
+      <li>Edita el archivo: deja el texto final y borra las marcas <code>&lt;&lt;&lt;</code> <code>===</code> <code>&gt;&gt;&gt;</code>.</li>
+      <li><code>git add index.html</code></li>
+      <li><code>git commit</code> para terminar el merge (o <code>git merge --abort</code> para cancelarlo).</li>
+    </ol>
+  </section>
+
   <!-- SLIDES -->
 
 </main>
