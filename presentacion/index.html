@@ -1078,7 +1078,111 @@ jobs:
     <div class="tip"><b>Esta presentación</b> se publica así: mira <code>.github/workflows/pages.yml</code> en este repositorio.</div>
   </section>
 
-  <!-- SLIDES -->
+  <!-- ===================== 11 · GUI Y BUENAS PRÁCTICAS ===================== -->
+  <section class="slide divider">
+    <div class="num">11</div>
+    <h2>Interfaces gráficas y buenas prácticas</h2>
+    <p class="lead">Lo mismo, con ratón. Y cómo no meterse en líos.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">11 · GUI</div>
+    <h2>Git sin comandos</h2>
+    <p>Todo lo visto se puede hacer con una interfaz gráfica. Conviene saber los comandos para entender qué hace cada botón.</p>
+    <div class="cols-3">
+      <div class="card">
+        <h3>VS Code</h3>
+        <p>Pestaña <strong>Source Control</strong> (<code>Ctrl+Shift+G</code>): stage con <strong>+</strong>, commit, ramas y sync. Y la terminal integrada con <code>Ctrl+ñ</code>.</p>
+      </div>
+      <div class="card">
+        <h3>GitHub Desktop</h3>
+        <p>La app oficial de GitHub, muy sencilla para empezar. Windows y macOS.</p>
+      </div>
+      <div class="card">
+        <h3>Sourcetree</h3>
+        <p>Gratuita, con vista detallada del historial y las ramas. <a href="https://www.sourcetreeapp.com/">sourcetreeapp.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">11 · Buenas prácticas</div>
+    <h2>Diez consejos</h2>
+    <div class="cols">
+      <ol style="margin:0;padding-left:1.4em">
+        <li><code>git status</code> antes de cada comando.</li>
+        <li>Commits pequeños y con buen mensaje.</li>
+        <li><code>git pull</code> antes de empezar a trabajar.</li>
+        <li>Una rama por tarea; <code>main</code> siempre funciona.</li>
+        <li>Revisa con <code>git diff</code> antes de hacer commit.</li>
+      </ol>
+      <ol start="6" style="margin:0;padding-left:1.4em">
+        <li>Nunca subas contraseñas ni <code>.env</code>.</li>
+        <li>No hagas <code>reset</code> ni <code>rebase</code> de lo ya subido.</li>
+        <li>Nada de <code>push --force</code> en ramas compartidas.</li>
+        <li>Un README que explique el proyecto.</li>
+        <li>Ante el pánico: <code>git reflog</code>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Chuleta</div>
+    <h2>Los comandos del curso</h2>
+    <div class="cols">
+      <dl class="cmds">
+        <dt><code>git init</code></dt><dd>crear repo</dd>
+        <dt><code>git clone url</code></dt><dd>copiar repo</dd>
+        <dt><code>git status</code></dt><dd>estado</dd>
+        <dt><code>git add .</code></dt><dd>preparar</dd>
+        <dt><code>git commit -m ""</code></dt><dd>guardar</dd>
+        <dt><code>git log --oneline</code></dt><dd>historial</dd>
+        <dt><code>git diff</code></dt><dd>ver cambios</dd>
+        <dt><code>git restore</code></dt><dd>descartar</dd>
+      </dl>
+      <dl class="cmds">
+        <dt><code>git switch -c rama</code></dt><dd>nueva rama</dd>
+        <dt><code>git merge rama</code></dt><dd>fusionar</dd>
+        <dt><code>git stash</code></dt><dd>aparcar</dd>
+        <dt><code>git revert hash</code></dt><dd>deshacer seguro</dd>
+        <dt><code>git reset --soft</code></dt><dd>deshacer local</dd>
+        <dt><code>git pull</code></dt><dd>traer</dd>
+        <dt><code>git push</code></dt><dd>subir</dd>
+        <dt><code>git reflog</code></dt><dd>rescatar</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Práctica</div>
+    <h2>Ejercicio: usa lo aprendido</h2>
+    <ol style="margin:0;padding-left:1.4em">
+      <li>Haz un <strong>fork</strong> de este repositorio y clónalo.</li>
+      <li>Ejecuta <code>git log --oneline --graph</code> y lee los mensajes: cada commit explica una parte del curso.</li>
+      <li>El PDF original se borró del repo… pero sigue en el historial. Encuéntralo y recupéralo con <code>git log --all -- "*.pdf"</code> y <code>git restore --source</code>.</li>
+      <li>Crea una rama, añade tu nombre a la lista de participantes del <code>README.md</code> y haz commit.</li>
+      <li>Súbela y abre una <strong>Pull Request</strong> al repositorio original.</li>
+    </ol>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Para seguir aprendiendo</div>
+    <h2>Recursos</h2>
+    <ul>
+      <li><a href="https://git-scm.com/book/es/v2">Pro Git</a>: el libro oficial, gratis y en español.</li>
+      <li><a href="https://learngitbranching.js.org/?locale=es_ES">Learn Git Branching</a>: aprende ramas jugando.</li>
+      <li><a href="https://skills.github.com/">GitHub Skills</a>: cursos interactivos dentro de GitHub.</li>
+      <li><a href="https://docs.github.com/es">Documentación de GitHub</a> en español.</li>
+      <li><a href="https://ohshitgit.com/es">Oh Shit, Git!?!</a>: soluciones para cuando algo sale mal.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Fin</div>
+    <h1>¡Gracias!</h1>
+    <p class="lead">Por formar parte de la formación.</p>
+    <p style="color:var(--muted)">Formación impartida por Alejandro Martín · ESOLIUPO</p>
+  </section>
 
 </main>
 
