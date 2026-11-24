@@ -1,1 +1,24 @@
+# ------------------------------------------------------------
+# .gitignore de ejemplo para la formación (ver módulo 04)
+# Cada línea es un patrón de archivos que Git debe ignorar.
+# ------------------------------------------------------------
+
+# Basura del sistema operativo, en cualquier subcarpeta
 **/.DS_Store
+Thumbs.db
+desktop.ini
+
+# Configuración local de editores
+.vscode/
+.idea/
+
+# Secretos: nunca deben llegar a GitHub
+.env
+*.key
+
+# Registros y archivos temporales
+*.log
+*.tmp
+
+# Excepción: este registro sí se sube (el ! anula una regla anterior)
+!ejemplo.log
