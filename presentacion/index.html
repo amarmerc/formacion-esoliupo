@@ -316,6 +316,124 @@ trabajo_final_DEFINITIVO_ahora_si.docx</pre>
     <p>Cada comando que veamos mueve cambios de una zona a otra. Si entiendes este dibujo, entiendes Git.</p>
   </section>
 
+  <!-- ===================== 02 · PRIMEROS PASOS ===================== -->
+  <section class="slide divider">
+    <div class="num">02</div>
+    <h2>Empezamos con Git</h2>
+    <p class="lead">Configurar, crear un repositorio y guardar los primeros cambios.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Primeros pasos</div>
+    <h2>Instalar y configurar (una sola vez)</h2>
+    <pre class="term"><span class="p">$</span> git --version
+<span class="o">git version 2.47.0</span>
+
+<span class="c"># Quién eres: aparecerá en cada commit</span>
+<span class="p">$</span> git config --global user.name "Tu Nombre"
+<span class="p">$</span> git config --global user.email "tu@correo.com"
+
+<span class="c"># Llamar "main" a la rama principal de los repos nuevos</span>
+<span class="p">$</span> git config --global init.defaultBranch main
+
+<span class="c"># Ver toda tu configuración</span>
+<span class="p">$</span> git config --list</pre>
+    <div class="warn"><b>Errata del PDF</b> La clave es <code>user.email</code>, no <code>user.mail</code>. Usa el mismo correo que en GitHub para que tus commits aparezcan enlazados a tu perfil.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Primeros pasos</div>
+    <h2>Crear un repositorio y ver su estado</h2>
+    <pre class="term"><span class="p">$</span> mkdir mi-proyecto && cd mi-proyecto
+<span class="p">$</span> git init
+<span class="o">Initialized empty Git repository in .../mi-proyecto/.git/</span>
+
+<span class="p">$</span> touch index.html
+<span class="p">$</span> git status
+<span class="o">On branch main
+Untracked files:
+        index.html</span></pre>
+    <ul>
+      <li><code>git init</code> crea la carpeta oculta <code>.git</code>: <strong>ahí vive todo el historial</strong>. Si la borras, pierdes el repositorio.</li>
+      <li><code>git status</code> es tu mejor amigo: úsalo antes y después de cada comando.</li>
+      <li>¿Dudas? <code>git help commit</code> o <code>git commit --help</code> abre el manual (sal con <code>q</code>).</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Staging area</div>
+    <h2>Añadir cambios: <code>git add</code></h2>
+    <div class="cols">
+      <dl class="cmds">
+        <dt><code>git add archivo</code></dt><dd>Prepara un archivo concreto.</dd>
+        <dt><code>git add .</code></dt><dd>Prepara todos los cambios de la carpeta (también los borrados).</dd>
+        <dt><code>git add -p</code></dt><dd>Revisa y elige trozo a trozo qué preparar.</dd>
+        <dt><code>git restore --staged archivo</code></dt><dd>Lo saca del staging (sin perder los cambios).</dd>
+        <dt><code>git rm archivo</code></dt><dd>Borra el archivo y prepara el borrado.</dd>
+        <dt><code>git rm --cached archivo</code></dt><dd>Deja de seguirlo pero lo conserva en disco.</dd>
+        <dt><code>git mv viejo nuevo</code></dt><dd>Renombra o mueve y lo prepara.</dd>
+      </dl>
+      <div class="card">
+        <h3>¿Por qué existe el staging?</h3>
+        <p>Te deja elegir <strong>qué entra en cada commit</strong>. Si has arreglado un bug y a la vez cambiado estilos, puedes hacer dos commits separados, cada uno con su explicación.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Commits</div>
+    <h2>Guardar una versión: <code>git commit</code></h2>
+    <pre class="term"><span class="p">$</span> git add index.html
+<span class="p">$</span> git commit -m "Crea la página de inicio"
+<span class="o">[main (root-commit) 4c5d6e7] Crea la página de inicio
+ 1 file changed, 0 insertions(+), 0 deletions(-)</span>
+
+<span class="c"># Sin -m se abre un editor para escribir un mensaje largo</span>
+<span class="p">$</span> git commit
+
+<span class="c"># Añadir lo olvidado al último commit (o corregir su mensaje)</span>
+<span class="p">$</span> git commit --amend</pre>
+    <div class="note"><b>Commit</b> Una "foto" de todo el proyecto con autor, fecha, mensaje y un identificador único (hash) como <code>4c5d6e7</code>.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Historial</div>
+    <h2>Ver el historial: <code>git log</code></h2>
+    <pre class="term"><span class="p">$</span> git log --oneline
+<span class="o">9f8e7d6 (HEAD -> main) Añade el formulario de contacto
+4c5d6e7 Crea la página de inicio</span>
+
+<span class="c"># Historial con dibujo de ramas</span>
+<span class="p">$</span> git log --oneline --graph --all
+
+<span class="c"># Qué cambió en un commit concreto</span>
+<span class="p">$</span> git show 9f8e7d6
+
+<span class="c"># Quién escribió cada línea de un archivo</span>
+<span class="p">$</span> git blame index.html</pre>
+    <div class="tip"><b>HEAD</b> es un puntero a "dónde estás ahora": normalmente el último commit de tu rama actual.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Buenas prácticas</div>
+    <h2>Cómo escribir un buen mensaje de commit</h2>
+    <div class="cols">
+      <div>
+        <ul>
+          <li>Primera línea corta (≈50 caracteres), en imperativo: <em>"Añade…", "Corrige…"</em>.</li>
+          <li>Línea en blanco y, si hace falta, un cuerpo que explique <strong>por qué</strong>.</li>
+          <li>Un commit = un cambio lógico.</li>
+          <li>Haz commits pequeños y frecuentes.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card hard" style="margin-bottom:14px"><p><code>cambios</code> · <code>asdf</code> · <code>arreglos varios</code></p></div>
+        <div class="card soft"><p><code>Corrige el envío del formulario vacío</code></p><p style="color:var(--muted)">El botón se podía pulsar sin rellenar el correo y llegaba un mensaje en blanco.</p></div>
+      </div>
+    </div>
+    <div class="tip"><b>Mira este repo</b> Ejecuta <code>git log</code> aquí: cada commit de esta presentación explica un tema del curso.</div>
+  </section>
+
   <!-- SLIDES -->
 
 </main>
