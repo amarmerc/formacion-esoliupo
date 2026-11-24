@@ -1,0 +1,1227 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Git y GitHub · Formación ESOLIUPO</title>
+<meta name="description" content="Presentación de la formación de Git y GitHub de ESOLIUPO.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-2: #141414;
+    --panel: #1a1a1a;
+    --line: #333333;
+    --text: #f5f5f0;
+    --muted: #a3a3a3;
+    --accent: #ffd60a;      /* amarillo principal */
+    --accent-2: #fff3b0;
+    --ok: #7bc47f;
+    --info: #ffe766;
+    --warn: #ff9f1c;
+    --danger: #ef6b6b;
+    --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+    --sans: "Space Grotesk", system-ui, "Segoe UI", sans-serif;
+    --pad: clamp(16px, 5vw, 72px);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--sans); }
+  body { overflow: hidden; }
+
+  /* ---------- Diapositivas ---------- */
+  .deck { position: fixed; inset: 0; }
+  .slide {
+    position: absolute; inset: 0;
+    padding: calc(var(--pad) * .8) var(--pad) 84px;
+    display: flex; flex-direction: column; justify-content: center; gap: 18px;
+    overflow-y: auto;
+    opacity: 0; visibility: hidden; transform: translateY(12px);
+    transition: opacity .35s ease, transform .35s ease, visibility .35s;
+    background: var(--bg);
+  }
+  .slide.active { opacity: 1; visibility: visible; transform: none; }
+  .slide > * { max-width: 1180px; width: 100%; margin-left: auto; margin-right: auto; }
+
+  .kicker { font-family: var(--mono); color: var(--accent); font-size: clamp(12px, 1.4vw, 16px); letter-spacing: .12em; text-transform: uppercase; }
+  h1 { font-size: clamp(44px, 9vw, 120px); line-height: .95; margin: 0; letter-spacing: -.03em; }
+  h2 { font-size: clamp(28px, 4.6vw, 58px); line-height: 1.05; margin: 0; letter-spacing: -.02em; }
+  h3 { font-size: clamp(18px, 2vw, 24px); margin: 0 0 8px; color: var(--accent-2); }
+  p, li, dd { font-size: clamp(16px, 1.75vw, 22px); line-height: 1.5; color: var(--text); }
+  p { margin: 0; }
+  .lead { color: var(--muted); font-size: clamp(17px, 2vw, 26px); }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: 4px 0; }
+  li::marker { color: var(--accent); }
+  strong { color: var(--accent-2); font-weight: 700; }
+  a { color: var(--info); }
+
+  code { font-family: var(--mono); font-size: .9em; background: var(--panel); border: 1px solid var(--line); padding: 1px 6px; border-radius: 5px; color: var(--accent-2); white-space: nowrap; }
+
+  /* Bloque de terminal */
+  pre.term {
+    margin: 0; font-family: var(--mono); font-size: clamp(13px, 1.45vw, 18px); line-height: 1.6;
+    background: #000000; border: 1px solid var(--line); border-radius: 12px;
+    padding: 44px 20px 18px; position: relative; overflow-x: auto; color: #f5f5f0;
+  }
+  pre.term::before {
+    content: ""; position: absolute; top: 14px; left: 16px; width: 12px; height: 12px; border-radius: 50%;
+    background: #ef6b6b; box-shadow: 20px 0 0 #e8c547, 40px 0 0 #7bc47f;
+  }
+  pre.term .p { color: var(--accent); user-select: none; }   /* prompt $ */
+  pre.term .c { color: var(--muted); }                       /* comentario */
+  pre.term .o { color: #d9d9d9; }                            /* salida */
+
+  /* Lista de comandos */
+  dl.cmds { display: grid; grid-template-columns: max-content 1fr; gap: 10px 24px; margin: 0; align-items: baseline; }
+  dl.cmds dt code { font-size: clamp(14px, 1.6vw, 19px); }
+  dl.cmds dd { margin: 0; color: var(--muted); }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 3vw, 40px); align-items: start; }
+  .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+  .card p, .card li { font-size: clamp(15px, 1.5vw, 19px); }
+  .card.hard { border-top: 4px solid var(--danger); }
+  .card.mid  { border-top: 4px solid var(--warn); }
+  .card.soft { border-top: 4px solid var(--ok); }
+
+  .note, .warn, .tip {
+    border-left: 4px solid var(--accent); background: var(--panel);
+    padding: 12px 16px; border-radius: 0 10px 10px 0; font-size: clamp(15px, 1.6vw, 20px); line-height: 1.5;
+  }
+  .warn { border-color: var(--warn); }
+  .tip  { border-color: var(--ok); }
+  .note b, .warn b, .tip b { font-family: var(--mono); font-size: .85em; text-transform: uppercase; letter-spacing: .08em; margin-right: 6px; }
+
+  /* Diapositivas de sección */
+  .slide.divider { background: var(--accent); }
+  .slide.divider h2, .slide.divider .lead { color: #0a0a0a; }
+  .divider .num { font-family: var(--mono); font-size: clamp(64px, 14vw, 180px); color: #0a0a0a; line-height: 1; }
+
+  .badge { display: inline-block; font-family: var(--mono); font-size: 12px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--accent); color: var(--accent); vertical-align: middle; margin-left: 8px; }
+
+  svg.diagram { width: 100%; height: auto; max-height: 52vh; }
+  svg.diagram text { font-family: var(--mono); fill: var(--text); }
+
+  /* ---------- Barra inferior ---------- */
+  .hud {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 56px; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 0 var(--pad); font-family: var(--mono); font-size: 13px; color: var(--muted);
+    background: var(--bg); border-top: 1px solid var(--line);
+  }
+  .hud button {
+    background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 8px;
+    font: inherit; padding: 6px 12px; cursor: pointer; min-width: 44px; min-height: 36px;
+  }
+  .hud button:hover { border-color: var(--accent); }
+  .hud .brand { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .progress { position: fixed; left: 0; top: 0; height: 3px; background: var(--accent); z-index: 11; transition: width .3s ease; }
+
+  @media (max-width: 760px) {
+    .cols, .cols-3 { grid-template-columns: 1fr; }
+    dl.cmds { grid-template-columns: 1fr; gap: 2px 0; }
+    dl.cmds dd { margin-bottom: 10px; }
+    .slide { justify-content: flex-start; padding-top: 40px; }
+    .hud .brand { display: none; }
+  }
+
+  /* Imprimir / exportar a PDF: una diapositiva por página */
+  @media print {
+    @page { size: 1280px 720px; margin: 0; }
+    body { overflow: visible; }
+    .deck { position: static; }
+    .slide { position: relative; opacity: 1; visibility: visible; transform: none; height: 720px; page-break-after: always; overflow: hidden; }
+    .hud, .progress { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<main class="deck" id="deck">
+
+  <!-- ===================== PORTADA ===================== -->
+  <section class="slide">
+    <div class="kicker">Formación ESOLIUPO</div>
+    <h1>Git<br>y GitHub</h1>
+    <p class="lead">Del primer <code>git init</code> a colaborar en equipo con Pull Requests.</p>
+    <p style="color:var(--muted)">Presentado por Alejandro Martín</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Cómo usar esta presentación</div>
+    <h2>Controles</h2>
+    <dl class="cmds">
+      <dt><code>→</code> <code>Espacio</code></dt><dd>Siguiente diapositiva</dd>
+      <dt><code>←</code></dt><dd>Diapositiva anterior</dd>
+      <dt><code>Inicio</code> <code>Fin</code></dt><dd>Primera / última diapositiva</dd>
+      <dt><code>Ctrl + P</code></dt><dd>Exportar a PDF (una diapositiva por página)</dd>
+    </dl>
+    <div class="tip"><b>Truco</b> En el móvil desliza a izquierda y derecha. La URL guarda la diapositiva en la que estás (<code>#12</code>).</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Índice</div>
+    <h2>Qué vamos a ver</h2>
+    <div class="cols">
+      <ul>
+        <li><strong>00</strong> · La terminal</li>
+        <li><strong>01</strong> · ¿Qué es Git? Las 4 zonas</li>
+        <li><strong>02</strong> · Primeros pasos y commits</li>
+        <li><strong>03</strong> · Ver y deshacer cambios</li>
+        <li><strong>04</strong> · .gitignore</li>
+        <li><strong>05</strong> · Ramas, merge y conflictos</li>
+      </ul>
+      <ul>
+        <li><strong>06</strong> · Herramientas extra: stash, tags, rebase</li>
+        <li><strong>07</strong> · GitHub: repositorios y licencias</li>
+        <li><strong>08</strong> · Remotos: clone, push, pull, fetch</li>
+        <li><strong>09</strong> · Colaborar: forks, Issues y Pull Requests</li>
+        <li><strong>10</strong> · GitHub Actions y GitHub Pages</li>
+        <li><strong>11</strong> · Interfaces gráficas y buenas prácticas</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== 00 · TERMINAL ===================== -->
+  <section class="slide divider">
+    <div class="num">00</div>
+    <h2>Comandos básicos de terminal</h2>
+    <p class="lead">Git se usa sobre todo desde la terminal: primero aprendemos a movernos por ella.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">00 · Terminal</div>
+    <h2>Moverse y gestionar archivos</h2>
+    <dl class="cmds">
+      <dt><code>pwd</code></dt><dd>Muestra la ruta de la carpeta en la que estás.</dd>
+      <dt><code>ls</code> · <code>ls -la</code></dt><dd>Lista archivos y carpetas (<code>-la</code> incluye los ocultos, como <code>.git</code>).</dd>
+      <dt><code>cd carpeta</code></dt><dd>Entra en la carpeta indicada.</dd>
+      <dt><code>cd ..</code></dt><dd>Sube a la carpeta anterior.</dd>
+      <dt><code>mkdir nombre</code></dt><dd>Crea una carpeta nueva.</dd>
+      <dt><code>touch archivo.txt</code></dt><dd>Crea un archivo vacío con ese nombre y extensión.</dd>
+      <dt><code>nano archivo.txt</code></dt><dd>Abre el archivo para editarlo en la terminal (<code>Ctrl+O</code> guarda, <code>Ctrl+X</code> sale).</dd>
+      <dt><code>cat archivo.txt</code></dt><dd>Muestra el contenido de un archivo.</dd>
+    </dl>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">00 · Terminal</div>
+    <h2>Borrar, limpiar y cancelar</h2>
+    <dl class="cmds">
+      <dt><code>rm archivo</code></dt><dd>Elimina un archivo.</dd>
+      <dt><code>rm -rf carpeta</code></dt><dd>Elimina una carpeta y todo su contenido, <strong>sin pedir confirmación</strong>.</dd>
+      <dt><code>clear</code></dt><dd>Limpia la pantalla de la terminal.</dd>
+      <dt><code>Ctrl + C</code></dt><dd>Cancela el comando que se está ejecutando o escribiendo.</dd>
+      <dt><code>↑</code> <code>↓</code></dt><dd>Recorre los comandos que ya has escrito.</dd>
+      <dt><code>Tab</code></dt><dd>Autocompleta nombres de archivos, carpetas y ramas.</dd>
+    </dl>
+    <div class="warn"><b>Ojo</b> <code>rm</code> no manda nada a la papelera: lo borrado no se recupera… salvo que lo tengas en un commit de Git.</div>
+    <div class="note"><b>Windows</b> Instala <strong>Git for Windows</strong> y usa <em>Git Bash</em>: tendrás estos mismos comandos.</div>
+  </section>
+
+  <!-- ===================== 01 · QUÉ ES GIT ===================== -->
+  <section class="slide divider">
+    <div class="num">01</div>
+    <h2>¿Qué es Git?</h2>
+    <p class="lead">Un sistema de control de versiones distribuido.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">01 · Qué es Git</div>
+    <h2>Una máquina del tiempo para tu proyecto</h2>
+    <div class="cols">
+      <div>
+        <p>Git registra los cambios de tus archivos para que puedas:</p>
+        <ul>
+          <li>Volver a cualquier versión anterior.</li>
+          <li>Saber <strong>quién</strong> cambió <strong>qué</strong>, <strong>cuándo</strong> y <strong>por qué</strong>.</li>
+          <li>Trabajar varias personas a la vez sin pisarse.</li>
+          <li>Probar ideas en ramas sin romper lo que funciona.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Distribuido</h3>
+        <p>Cada persona tiene una <strong>copia completa</strong> del historial en su ordenador. Puedes hacer commits sin Internet y, si el servidor se cae, el proyecto sigue a salvo en cada copia.</p>
+      </div>
+    </div>
+    <div class="note"><b>No confundir</b> <strong>Git</strong> es el programa que guarda versiones. <strong>GitHub</strong> es una web donde alojar repositorios Git y colaborar (otras: GitLab, Bitbucket).</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">01 · Qué es Git</div>
+    <h2>Sin Git vs. con Git</h2>
+    <div class="cols">
+      <div class="card hard">
+        <h3>Sin Git</h3>
+        <pre class="term">trabajo.docx
+trabajo_v2.docx
+trabajo_final.docx
+trabajo_final_DEFINITIVO.docx
+trabajo_final_DEFINITIVO_ahora_si.docx</pre>
+      </div>
+      <div class="card soft">
+        <h3>Con Git</h3>
+        <pre class="term"><span class="o">a1b2c3d</span> Corrige erratas de la conclusión
+<span class="o">9f8e7d6</span> Añade gráfico de resultados
+<span class="o">4c5d6e7</span> Redacta la introducción
+<span class="o">0a1b2c3</span> Crea el documento</pre>
+        <p>Un solo archivo, y cada versión con su explicación.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">01 · Las partes de Git</div>
+    <h2>Las 4 zonas de Git</h2>
+    <svg class="diagram" viewBox="0 0 1000 300" role="img" aria-label="Flujo entre directorio de trabajo, staging area, repositorio local y repositorio remoto">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#ffd60a"/></marker>
+        <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#f5f5f0"/></marker>
+      </defs>
+      <g font-size="17" text-anchor="middle">
+        <rect x="10"  y="70" width="200" height="110" rx="14" fill="#1a1a1a" stroke="#333333"/>
+        <text x="110" y="118" font-weight="700">Directorio</text><text x="110" y="142" font-weight="700">de trabajo</text>
+        <text x="110" y="205" font-size="13" fill="#a3a3a3">tus archivos</text>
+
+        <rect x="270" y="70" width="200" height="110" rx="14" fill="#1a1a1a" stroke="#333333"/>
+        <text x="370" y="118" font-weight="700">Staging</text><text x="370" y="142" font-weight="700">area</text>
+        <text x="370" y="205" font-size="13" fill="#a3a3a3">lo preparado</text>
+
+        <rect x="530" y="70" width="200" height="110" rx="14" fill="#1a1a1a" stroke="#ffd60a"/>
+        <text x="630" y="118" font-weight="700">Repositorio</text><text x="630" y="142" font-weight="700">local</text>
+        <text x="630" y="205" font-size="13" fill="#a3a3a3">carpeta .git</text>
+
+        <rect x="790" y="70" width="200" height="110" rx="14" fill="#1a1a1a" stroke="#f5f5f0"/>
+        <text x="890" y="118" font-weight="700">Repositorio</text><text x="890" y="142" font-weight="700">remoto</text>
+        <text x="890" y="205" font-size="13" fill="#a3a3a3">GitHub</text>
+      </g>
+      <g font-size="15" fill="none" stroke-width="2.5">
+        <path d="M212 95 L268 95" stroke="#ffd60a" marker-end="url(#ar)"/>
+        <path d="M472 95 L528 95" stroke="#ffd60a" marker-end="url(#ar)"/>
+        <path d="M732 95 L788 95" stroke="#f5f5f0" marker-end="url(#ab)"/>
+        <path d="M788 155 L732 155" stroke="#f5f5f0" marker-end="url(#ab)"/>
+        <path d="M630 182 C 630 270, 110 270, 110 182" stroke="#a3a3a3" stroke-dasharray="6 6" marker-end="url(#ar)"/>
+      </g>
+      <g font-size="16" text-anchor="middle">
+        <text x="240" y="60" fill="#fff3b0">add</text>
+        <text x="500" y="60" fill="#fff3b0">commit</text>
+        <text x="760" y="60" fill="#f5f5f0">push</text>
+        <text x="760" y="148" fill="#f5f5f0" dy="30">pull</text>
+        <text x="370" y="290" fill="#a3a3a3">switch / restore</text>
+      </g>
+    </svg>
+    <p>Cada comando que veamos mueve cambios de una zona a otra. Si entiendes este dibujo, entiendes Git.</p>
+  </section>
+
+  <!-- ===================== 02 · PRIMEROS PASOS ===================== -->
+  <section class="slide divider">
+    <div class="num">02</div>
+    <h2>Empezamos con Git</h2>
+    <p class="lead">Configurar, crear un repositorio y guardar los primeros cambios.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Primeros pasos</div>
+    <h2>Instalar y configurar (una sola vez)</h2>
+    <pre class="term"><span class="p">$</span> git --version
+<span class="o">git version 2.47.0</span>
+
+<span class="c"># Quién eres: aparecerá en cada commit</span>
+<span class="p">$</span> git config --global user.name "Tu Nombre"
+<span class="p">$</span> git config --global user.email "tu@correo.com"
+
+<span class="c"># Llamar "main" a la rama principal de los repos nuevos</span>
+<span class="p">$</span> git config --global init.defaultBranch main
+
+<span class="c"># Ver toda tu configuración</span>
+<span class="p">$</span> git config --list</pre>
+    <div class="warn"><b>Errata del PDF</b> La clave es <code>user.email</code>, no <code>user.mail</code>. Usa el mismo correo que en GitHub para que tus commits aparezcan enlazados a tu perfil.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Primeros pasos</div>
+    <h2>Crear un repositorio y ver su estado</h2>
+    <pre class="term"><span class="p">$</span> mkdir mi-proyecto && cd mi-proyecto
+<span class="p">$</span> git init
+<span class="o">Initialized empty Git repository in .../mi-proyecto/.git/</span>
+
+<span class="p">$</span> touch index.html
+<span class="p">$</span> git status
+<span class="o">On branch main
+Untracked files:
+        index.html</span></pre>
+    <ul>
+      <li><code>git init</code> crea la carpeta oculta <code>.git</code>: <strong>ahí vive todo el historial</strong>. Si la borras, pierdes el repositorio.</li>
+      <li><code>git status</code> es tu mejor amigo: úsalo antes y después de cada comando.</li>
+      <li>¿Dudas? <code>git help commit</code> o <code>git commit --help</code> abre el manual (sal con <code>q</code>).</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Staging area</div>
+    <h2>Añadir cambios: <code>git add</code></h2>
+    <div class="cols">
+      <dl class="cmds">
+        <dt><code>git add archivo</code></dt><dd>Prepara un archivo concreto.</dd>
+        <dt><code>git add .</code></dt><dd>Prepara todos los cambios de la carpeta (también los borrados).</dd>
+        <dt><code>git restore --staged archivo</code></dt><dd>Lo saca del staging (sin perder los cambios).</dd>
+        <dt><code>git rm archivo</code></dt><dd>Borra el archivo y prepara el borrado.</dd>
+      </dl>
+      <div class="card">
+        <h3>¿Por qué existe el staging?</h3>
+        <p>Te deja elegir <strong>qué entra en cada commit</strong>. Si has arreglado un bug y a la vez cambiado estilos, haces dos commits separados.</p>
+        <p style="margin-top:10px;color:var(--muted)">Con <code>git add -p</code> eliges incluso trozo a trozo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Commits</div>
+    <h2>Guardar una versión: <code>git commit</code></h2>
+    <pre class="term"><span class="p">$</span> git add index.html
+<span class="p">$</span> git commit -m "Crea la página de inicio"
+<span class="o">[main (root-commit) 4c5d6e7] Crea la página de inicio
+ 1 file changed, 0 insertions(+), 0 deletions(-)</span>
+
+<span class="c"># Sin -m se abre un editor para escribir un mensaje largo</span>
+<span class="p">$</span> git commit
+
+<span class="c"># Añadir lo olvidado al último commit (o corregir su mensaje)</span>
+<span class="p">$</span> git commit --amend</pre>
+    <div class="note"><b>Commit</b> Una "foto" de todo el proyecto con autor, fecha, mensaje y un identificador único (hash) como <code>4c5d6e7</code>.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Historial</div>
+    <h2>Ver el historial: <code>git log</code></h2>
+    <pre class="term"><span class="p">$</span> git log --oneline
+<span class="o">9f8e7d6 (HEAD -> main) Añade el formulario de contacto
+4c5d6e7 Crea la página de inicio</span>
+
+<span class="c"># Historial con dibujo de ramas</span>
+<span class="p">$</span> git log --oneline --graph --all
+
+<span class="c"># Qué cambió en un commit concreto</span>
+<span class="p">$</span> git show 9f8e7d6
+
+<span class="c"># Quién escribió cada línea de un archivo</span>
+<span class="p">$</span> git blame index.html</pre>
+    <div class="tip"><b>HEAD</b> es un puntero a "dónde estás ahora": normalmente el último commit de tu rama actual.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">02 · Buenas prácticas</div>
+    <h2>Cómo escribir un buen mensaje de commit</h2>
+    <div class="cols">
+      <div>
+        <ul>
+          <li>Primera línea corta (≈50 caracteres), en imperativo: <em>"Añade…", "Corrige…"</em>.</li>
+          <li>Línea en blanco y, si hace falta, un cuerpo que explique <strong>por qué</strong>.</li>
+          <li>Un commit = un cambio lógico.</li>
+          <li>Haz commits pequeños y frecuentes.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card hard" style="margin-bottom:14px"><p><code>cambios</code> · <code>asdf</code> · <code>arreglos varios</code></p></div>
+        <div class="card soft"><p><code>Corrige el envío del formulario vacío</code></p><p style="color:var(--muted)">El botón se podía pulsar sin rellenar el correo y llegaba un mensaje en blanco.</p></div>
+      </div>
+    </div>
+    <div class="tip"><b>Mira este repo</b> Ejecuta <code>git log</code> aquí: cada commit de esta presentación explica un tema del curso.</div>
+  </section>
+
+  <!-- ===================== 03 · DESHACER ===================== -->
+  <section class="slide divider">
+    <div class="num">03</div>
+    <h2>Ver y deshacer cambios</h2>
+    <p class="lead">Volver a versiones anteriores sin miedo.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Comparar</div>
+    <h2>¿Qué he cambiado? <code>git diff</code></h2>
+    <pre class="term"><span class="c"># Cambios aún no preparados (directorio de trabajo vs. staging)</span>
+<span class="p">$</span> git diff
+
+<span class="c"># Cambios ya preparados con git add (lo que entrará en el commit)</span>
+<span class="p">$</span> git diff --staged
+
+<span class="c"># Diferencias entre dos commits o dos ramas</span>
+<span class="p">$</span> git diff 4c5d6e7 9f8e7d6
+<span class="p">$</span> git diff main nueva-funcion</pre>
+    <p>Las líneas con <span style="color:var(--ok)">+</span> se han añadido y las de <span style="color:var(--danger)">−</span> se han eliminado.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Descartar</div>
+    <h2>Descartar cambios sin commit: <code>git restore</code></h2>
+    <dl class="cmds">
+      <dt><code>git restore archivo</code></dt><dd>Descarta lo que has editado y lo deja como en el último commit.</dd>
+      <dt><code>git restore .</code></dt><dd>Descarta todos los cambios no preparados.</dd>
+      <dt><code>git restore --staged archivo</code></dt><dd>Lo saca del staging, sin tocar tus ediciones.</dd>
+      <dt><code>git restore --source 4c5d6e7 archivo</code></dt><dd>Recupera un archivo tal y como estaba en un commit anterior.</dd>
+    </dl>
+    <div class="warn"><b>Cuidado</b> Lo descartado con <code>git restore</code> nunca estuvo en un commit, así que no se puede recuperar.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Viajar en el tiempo</div>
+    <h2>Ver versiones anteriores</h2>
+    <pre class="term"><span class="c"># Moverte a un commit antiguo para mirarlo (sin borrar nada)</span>
+<span class="p">$</span> git switch --detach 4c5d6e7     <span class="c"># antes: git checkout 4c5d6e7</span>
+<span class="o">HEAD is now at 4c5d6e7 Crea la página de inicio</span>
+
+<span class="c"># Volver al presente</span>
+<span class="p">$</span> git switch main                 <span class="c"># antes: git checkout main</span></pre>
+    <div class="note"><b>Detached HEAD</b> Cuando visitas un commit antiguo, HEAD no apunta a ninguna rama. Puedes mirar y probar, pero si quieres guardar cambios crea una rama: <code>git switch -c rescate</code>.</div>
+    <div class="tip"><b>switch y restore</b> Desde Git 2.23 <code>git checkout</code> se dividió en dos comandos más claros: <code>switch</code> (moverse entre ramas y commits) y <code>restore</code> (recuperar archivos). <code>checkout</code> sigue funcionando.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Revert</div>
+    <h2>Deshacer un commit de forma segura: <code>git revert</code></h2>
+    <div class="cols">
+      <div>
+        <p>Crea un <strong>commit nuevo</strong> que hace lo contrario del commit indicado, como un <code>Ctrl+Z</code> que queda registrado.</p>
+        <pre class="term" style="margin-top:14px"><span class="p">$</span> git revert 9f8e7d6
+<span class="p">$</span> git revert 9f8e7d6 --no-edit</pre>
+      </div>
+      <div class="card soft">
+        <h3>Úsalo en lo ya compartido</h3>
+        <p>No reescribe el historial, así que es la forma correcta de deshacer algo que ya has subido a GitHub.</p>
+        <p style="margin-top:10px;color:var(--muted)">Si se abre el editor Vim: pulsa <code>Esc</code>, escribe <code>:wq</code> y <code>Enter</code>. Con <code>--no-edit</code> no se abre.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Reset</div>
+    <h2>Volver atrás borrando commits: <code>git reset</code></h2>
+    <p>Mueve la rama a un commit anterior y "olvida" los posteriores. Hay tres modos:</p>
+    <div class="cols-3">
+      <div class="card hard">
+        <h3>--hard</h3>
+        <p>El más brutal. Borra los commits <strong>y</strong> todos los cambios en los archivos.</p>
+      </div>
+      <div class="card mid">
+        <h3>--mixed <span class="badge">por defecto</span></h3>
+        <p>Borra los commits, pero los archivos se quedan editados y <strong>sin</strong> añadir al staging.</p>
+      </div>
+      <div class="card soft">
+        <h3>--soft</h3>
+        <p>El más seguro. Borra los commits y deja los cambios <strong>en el staging</strong>, como si hubieras hecho <code>git add .</code></p>
+      </div>
+    </div>
+    <pre class="term"><span class="p">$</span> git reset --soft HEAD~1   <span class="c"># deshace el último commit (HEAD~1 = uno antes de HEAD)</span></pre>
+    <div class="warn"><b>Regla de oro</b> No uses <code>reset</code> sobre commits que ya hayas subido a GitHub: usa <code>revert</code>.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Red de seguridad</div>
+    <h2>"La he liado": <code>git reflog</code></h2>
+    <pre class="term"><span class="p">$</span> git reset --hard HEAD~3        <span class="c"># ¡ups! adiós a 3 commits</span>
+<span class="p">$</span> git reflog
+<span class="o">4c5d6e7 HEAD@{0}: reset: moving to HEAD~3
+a1b2c3d HEAD@{1}: commit: Corrige erratas de la conclusión</span>
+<span class="p">$</span> git reset --hard a1b2c3d        <span class="c"># y vuelven</span></pre>
+    <p><code>reflog</code> apunta cada movimiento de HEAD en tu ordenador durante unos 90 días. Casi todo lo que llegó a estar en un commit se puede recuperar.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Resumen</div>
+    <h2>¿Qué comando uso para deshacer?</h2>
+    <dl class="cmds">
+      <dt>Editado, sin <code>add</code></dt><dd><code>git restore archivo</code></dd>
+      <dt>Ya con <code>add</code></dt><dd><code>git restore --staged archivo</code></dd>
+      <dt>Último commit, no subido</dt><dd><code>git commit --amend</code> o <code>git reset --soft HEAD~1</code></dd>
+      <dt>Commit ya subido</dt><dd><code>git revert hash</code></dd>
+      <dt>Solo quiero mirar</dt><dd><code>git switch --detach hash</code></dd>
+      <dt>Algo se ha perdido</dt><dd><code>git reflog</code></dd>
+    </dl>
+  </section>
+
+  <!-- ===================== 04 · GITIGNORE ===================== -->
+  <section class="slide divider">
+    <div class="num">04</div>
+    <h2>Uso de .gitignore</h2>
+    <p class="lead">Lo que nunca debería llegar a un commit.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">04 · .gitignore</div>
+    <h2>Ignorar archivos</h2>
+    <div class="cols">
+      <div>
+        <p>Hay archivos que no queremos guardar: <strong>basura</strong> del sistema, archivos <strong>generados</strong> o <strong>secretos</strong>. Se listan en un archivo <code>.gitignore</code> en la raíz del repo y Git hace como si no existieran: nunca llegan al staging.</p>
+        <div class="warn" style="margin-top:16px"><b>Secretos</b> Contraseñas, tokens y archivos <code>.env</code> siempre en el <code>.gitignore</code>. Lo que se sube a GitHub queda en el historial aunque luego lo borres.</div>
+      </div>
+      <pre class="term"><span class="c"># Un archivo concreto</span>
+.env
+<span class="c"># Por extensión</span>
+*.log
+<span class="c"># Una carpeta entera</span>
+node_modules/
+<span class="c"># En cualquier subcarpeta</span>
+**/.DS_Store
+<span class="c"># Excepción: este sí se sube</span>
+!importante.log</pre>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">04 · .gitignore</div>
+    <h2>Si el archivo ya estaba en un commit</h2>
+    <p>Añadirlo al <code>.gitignore</code> no basta: Git ya lo está siguiendo. Hay que sacarlo de la caché:</p>
+    <pre class="term"><span class="p">$</span> echo "secreto.txt" >> .gitignore
+<span class="p">$</span> git rm --cached secreto.txt         <span class="c"># un archivo</span>
+<span class="p">$</span> git rm -r --cached carpeta/          <span class="c"># una carpeta</span>
+<span class="p">$</span> git commit -m "Deja de seguir secreto.txt"
+
+<span class="c"># ¿Por qué se ignora este archivo?</span>
+<span class="p">$</span> git check-ignore -v secreto.txt</pre>
+    <div class="tip"><b>Plantillas</b> GitHub ofrece <code>.gitignore</code> listos para cada lenguaje al crear un repo, y hay muchos más en <a href="https://github.com/github/gitignore">github.com/github/gitignore</a>.</div>
+  </section>
+
+  <!-- ===================== 05 · RAMAS ===================== -->
+  <section class="slide divider">
+    <div class="num">05</div>
+    <h2>Gestión de ramas</h2>
+    <p class="lead">Desarrollar nuevas funciones sin tocar lo que ya funciona.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">05 · Ramas</div>
+    <h2>¿Qué es una rama?</h2>
+    <svg class="diagram" viewBox="0 0 1000 220" role="img" aria-label="Rama main con una rama nueva que sale de ella y vuelve a unirse con un merge">
+      <g stroke-width="4" fill="none">
+        <path d="M40 150 H960" stroke="#ffd60a"/>
+        <path d="M280 150 C 330 150, 330 60, 380 60 H640 C 690 60, 690 150, 740 150" stroke="#f5f5f0"/>
+      </g>
+      <g stroke="#0a0a0a" stroke-width="4">
+        <circle cx="80"  cy="150" r="16" fill="#ffd60a"/>
+        <circle cx="200" cy="150" r="16" fill="#ffd60a"/>
+        <circle cx="280" cy="150" r="16" fill="#ffd60a"/>
+        <circle cx="520" cy="150" r="16" fill="#ffd60a"/>
+        <circle cx="740" cy="150" r="20" fill="#fff3b0"/>
+        <circle cx="880" cy="150" r="16" fill="#ffd60a"/>
+        <circle cx="420" cy="60"  r="16" fill="#f5f5f0"/>
+        <circle cx="560" cy="60"  r="16" fill="#f5f5f0"/>
+      </g>
+      <g font-size="18" font-weight="700">
+        <text x="40" y="200" fill="#ffd60a">main</text>
+        <text x="430" y="28" fill="#f5f5f0">nueva-funcion</text>
+        <text x="700" y="205" fill="#fff3b0">merge</text>
+      </g>
+    </svg>
+    <p>Una rama es una <strong>línea de desarrollo independiente</strong>. En <code>main</code> está la versión estable; cada función o arreglo se hace en su propia rama y, cuando está lista, se fusiona.</p>
+    <div class="note"><b>Por dentro</b> Una rama solo es una etiqueta que apunta a un commit. Crearla es instantáneo y no copia archivos.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">05 · Ramas</div>
+    <h2>Crear, cambiar, listar y borrar</h2>
+    <dl class="cmds">
+      <dt><code>git branch</code></dt><dd>Lista las ramas locales (<code>*</code> marca la actual). <code>-a</code> incluye las remotas.</dd>
+      <dt><code>git branch nombre</code></dt><dd>Crea una rama y te quedas en la actual.</dd>
+      <dt><code>git switch nombre</code></dt><dd>Cambia a esa rama (antes: <code>git checkout nombre</code>).</dd>
+      <dt><code>git switch -c nombre</code></dt><dd>La crea y te cambia a ella (antes: <code>git checkout -b nombre</code>).</dd>
+      <dt><code>git branch -m nuevo</code></dt><dd>Renombra la rama actual.</dd>
+      <dt><code>git branch -d nombre</code></dt><dd>Borra una rama ya fusionada (<code>-D</code> fuerza el borrado).</dd>
+    </dl>
+    <div class="tip"><b>Nombres</b> Usa nombres que expliquen la tarea: <code>feature/formulario-contacto</code>, <code>fix/menu-movil</code>, <code>docs/readme</code>.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">05 · Merge</div>
+    <h2>Fusionar ramas: <code>git merge</code></h2>
+    <pre class="term"><span class="c"># 1. Ve a la rama que va a RECIBIR los cambios</span>
+<span class="p">$</span> git switch main
+
+<span class="c"># 2. Trae los cambios de la otra rama</span>
+<span class="p">$</span> git merge nueva-funcion
+
+<span class="c"># 3. Si ya no la vas a usar, bórrala</span>
+<span class="p">$</span> git branch -d nueva-funcion</pre>
+    <div class="cols">
+      <div class="card"><h3>Fast-forward</h3><p>Si <code>main</code> no ha cambiado desde que creaste la rama, Git solo adelanta el puntero. No hay commit de merge.</p></div>
+      <div class="card"><h3>Merge de tres vías</h3><p>Si ambas ramas tienen commits nuevos, Git crea un <strong>commit de merge</strong> que une las dos historias.</p></div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">05 · Conflictos</div>
+    <h2>Conflictos de merge</h2>
+    <p>Ocurren cuando las dos ramas cambian <strong>las mismas líneas</strong> del mismo archivo. Git no adivina: te pregunta.</p>
+    <pre class="term"><span class="o">CONFLICT (content): Merge conflict in index.html</span>
+
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+&lt;h1&gt;Bienvenidos&lt;/h1&gt;           <span class="c">← tu versión (main)</span>
+=======
+&lt;h1&gt;Hola a todos&lt;/h1&gt;          <span class="c">← la versión de la otra rama</span>
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; nueva-funcion</pre>
+    <ol style="margin:0;padding-left:1.4em">
+      <li>Edita el archivo: deja el texto final y borra las marcas <code>&lt;&lt;&lt;</code> <code>===</code> <code>&gt;&gt;&gt;</code>.</li>
+      <li><code>git add index.html</code></li>
+      <li><code>git commit</code> para terminar el merge (o <code>git merge --abort</code> para cancelarlo).</li>
+    </ol>
+  </section>
+
+  <!-- ===================== 06 · HERRAMIENTAS EXTRA ===================== -->
+  <section class="slide divider">
+    <div class="num">06</div>
+    <h2>Herramientas extra</h2>
+    <p class="lead">Stash, etiquetas, rebase y cherry-pick.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">06 · Stash</div>
+    <h2>Guardar cambios a medias: <code>git stash</code></h2>
+    <p>Estás a mitad de algo y necesitas cambiar de rama urgentemente, pero no quieres hacer un commit a medias:</p>
+    <pre class="term"><span class="p">$</span> git stash push -m "formulario a medias"   <span class="c"># guarda y deja el directorio limpio</span>
+<span class="p">$</span> git switch main
+<span class="c"># ... arreglas el bug urgente ...</span>
+<span class="p">$</span> git switch nueva-funcion
+<span class="p">$</span> git stash list                           <span class="c"># ver lo guardado</span>
+<span class="o">stash@{0}: On nueva-funcion: formulario a medias</span>
+<span class="p">$</span> git stash pop                            <span class="c"># recupera y lo borra del stash</span></pre>
+    <div class="note"><b>-u</b> Por defecto <code>stash</code> no guarda archivos nuevos sin seguir; añade <code>-u</code> para incluirlos.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">06 · Tags</div>
+    <h2>Marcar versiones: <code>git tag</code></h2>
+    <pre class="term"><span class="p">$</span> git tag -a v1.0 -m "Primera versión pública"
+<span class="p">$</span> git tag                       <span class="c"># listar</span>
+<span class="p">$</span> git show v1.0
+<span class="p">$</span> git push origin v1.0          <span class="c"># las etiquetas no se suben solas</span></pre>
+    <p>Una etiqueta es un nombre fijo para un commit importante. En GitHub sirven para crear <strong>Releases</strong> con notas de versión y archivos descargables.</p>
+    <div class="tip"><b>Versionado semántico</b> <code>MAYOR.MENOR.PARCHE</code>: <code>v2.0.0</code> rompe compatibilidad, <code>v1.3.0</code> añade funciones, <code>v1.2.1</code> corrige errores.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">06 · Rebase</div>
+    <h2>Merge vs. rebase</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>git merge main</h3>
+        <p>Une las historias con un commit de merge. <strong>No reescribe nada</strong>: seguro siempre.</p>
+      </div>
+      <div class="card">
+        <h3>git rebase main</h3>
+        <p>"Recoloca" tus commits encima del último de <code>main</code>. El historial queda en línea recta, pero <strong>los commits cambian de hash</strong>.</p>
+      </div>
+    </div>
+    <pre class="term"><span class="p">$</span> git switch nueva-funcion
+<span class="p">$</span> git rebase main
+<span class="c"># si hay conflictos: resolver, git add, y luego</span>
+<span class="p">$</span> git rebase --continue          <span class="c"># o git rebase --abort</span></pre>
+    <div class="warn"><b>Regla de oro</b> No hagas rebase de commits que otras personas ya tienen. Úsalo solo en tus ramas locales.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">06 · Cherry-pick</div>
+    <h2>Copiar un commit suelto: <code>git cherry-pick</code></h2>
+    <pre class="term"><span class="c"># Traer a main solo el arreglo hecho en otra rama</span>
+<span class="p">$</span> git switch main
+<span class="p">$</span> git cherry-pick a1b2c3d</pre>
+    <p>Aplica los cambios de un commit concreto en la rama actual, creando un commit nuevo. Útil para llevar un arreglo urgente a <code>main</code> sin fusionar toda la rama.</p>
+  </section>
+
+  <!-- ===================== 07 · GITHUB ===================== -->
+  <section class="slide divider">
+    <div class="num">07</div>
+    <h2>Introducción a GitHub</h2>
+    <p class="lead">Tu repositorio en la nube, listo para colaborar.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">07 · GitHub</div>
+    <h2>¿Qué es GitHub?</h2>
+    <div class="cols">
+      <div>
+        <p>Una plataforma web que <strong>aloja repositorios Git</strong> y añade todo lo necesario para trabajar en equipo:</p>
+        <ul>
+          <li>Copia de seguridad en la nube.</li>
+          <li>Issues para tareas y errores.</li>
+          <li>Pull Requests para revisar código.</li>
+          <li>Automatización con Actions.</li>
+          <li>Webs gratis con Pages.</li>
+          <li>Tu perfil: un portfolio de tus proyectos.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Crear un repositorio</h3>
+        <ol style="margin:0;padding-left:1.3em">
+          <li>Botón <strong>New</strong> (o el <strong>+</strong> de arriba a la derecha).</li>
+          <li>Nombre y descripción.</li>
+          <li><strong>Público</strong> o <strong>privado</strong>.</li>
+          <li>Opcional: README, <code>.gitignore</code> y licencia.</li>
+        </ol>
+        <p style="margin-top:10px;color:var(--muted)">Si vas a subir un repo que ya tienes en local, créalo <strong>vacío</strong> (sin README ni licencia).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">07 · README</div>
+    <h2>El README.md y Markdown</h2>
+    <div class="cols">
+      <div>
+        <p>El <code>README.md</code> es la portada del repositorio: GitHub lo muestra debajo de los archivos. Debe explicar <strong>qué es</strong> el proyecto, <strong>cómo se usa</strong> y <strong>cómo contribuir</strong>.</p>
+        <p style="margin-top:12px">Se escribe en <strong>Markdown</strong>, un formato de texto sencillo.</p>
+      </div>
+      <pre class="term"># Título
+## Subtítulo
+
+**negrita** y *cursiva*
+
+- elemento de lista
+[enlace](https://github.com)
+![imagen](logo.png)
+
+`código en línea`
+- [ ] tarea pendiente
+- [x] tarea hecha</pre>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">07 · Licencias</div>
+    <h2>¿Para qué sirve la licencia?</h2>
+    <div class="cols">
+      <ul>
+        <li>Sin licencia, el código es <strong>"todos los derechos reservados"</strong> por defecto, aunque el repo sea público.</li>
+        <li>Dice qué se puede hacer con tu código y qué no.</li>
+        <li>Protege al autor de responsabilidades.</li>
+      </ul>
+      <div>
+        <div class="card soft" style="margin-bottom:14px">
+          <h3>Permisivas · MIT, Apache 2.0</h3>
+          <p>Se puede usar para cualquier cosa, incluso cerrada o comercial, siempre que se dé crédito al autor.</p>
+        </div>
+        <div class="card mid">
+          <h3>Copyleft · GNU GPL</h3>
+          <p>Quien distribuya una versión modificada debe publicarla también como código abierto con la misma licencia.</p>
+        </div>
+      </div>
+    </div>
+    <div class="tip"><b>Ayuda</b> <a href="https://choosealicense.com/">choosealicense.com</a> te ayuda a elegir. Este repositorio usa la licencia MIT.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">07 · La interfaz</div>
+    <h2>Pestañas de un repositorio</h2>
+    <dl class="cmds">
+      <dt><code>Code</code></dt><dd>Los archivos del proyecto, el README y el botón para clonar.</dd>
+      <dt><code>Issues</code></dt><dd>Errores, ideas y tareas que cualquiera puede notificar.</dd>
+      <dt><code>Pull requests</code></dt><dd>Propuestas de cambios para revisar y fusionar.</dd>
+      <dt><code>Actions</code></dt><dd>Automatizaciones: tests, despliegues…</dd>
+      <dt><code>Projects</code></dt><dd>Tableros para organizarte con tu equipo.</dd>
+      <dt><code>Wiki</code></dt><dd>Documentación extensa del proyecto.</dd>
+      <dt><code>Security</code></dt><dd>Avisos de vulnerabilidades y ajustes de seguridad.</dd>
+      <dt><code>Insights</code></dt><dd>Estadísticas: contribuidores, actividad, tráfico.</dd>
+      <dt><code>Settings</code></dt><dd>Configuración: colaboradores, ramas protegidas, Pages…</dd>
+    </dl>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">07 · Interaccionar con otros repos</div>
+    <h2>Watch, Star, Fork y Clone</h2>
+    <div class="cols">
+      <dl class="cmds">
+        <dt><code>Watch</code></dt><dd>Elige qué notificaciones recibes: todas, solo menciones o ninguna.</dd>
+        <dt><code>Star</code></dt><dd>Como un "me gusta" o marcador: guardas el repo en tus favoritos.</dd>
+      </dl>
+      <dl class="cmds">
+        <dt><code>Fork</code></dt><dd>Copia el repo en <strong>tu cuenta de GitHub</strong> para trabajar en él por tu cuenta.</dd>
+        <dt><code>Clone</code></dt><dd>Copia el repo en <strong>tu ordenador</strong>, con todo el historial.</dd>
+        <dt><code>Download ZIP</code></dt><dd>Solo los archivos actuales, <strong>sin</strong> historial ni Git.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===================== 08 · REMOTOS ===================== -->
+  <section class="slide divider">
+    <div class="num">08</div>
+    <h2>Trabajar con remotos</h2>
+    <p class="lead">Conectar tu repositorio local con GitHub.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">08 · Autenticación</div>
+    <h2>Iniciar sesión desde la terminal</h2>
+    <p>GitHub <strong>no acepta tu contraseña</strong> en la terminal. Tienes tres opciones:</p>
+    <div class="cols-3">
+      <div class="card">
+        <h3>GitHub CLI <span class="badge">recomendado</span></h3>
+        <p>Instala <code>gh</code> y ejecuta <code>gh auth login</code>. Se encarga de todo.</p>
+      </div>
+      <div class="card">
+        <h3>Token (HTTPS)</h3>
+        <p><em>Settings → Developer settings → Personal access tokens</em>. Al hacer push, usuario + token como contraseña.</p>
+      </div>
+      <div class="card">
+        <h3>Clave SSH</h3>
+        <p><code>ssh-keygen -t ed25519</code> y pega la clave pública en <em>Settings → SSH keys</em>. Clona con <code>git@github.com:…</code></p>
+      </div>
+    </div>
+    <div class="note"><b>Cerrar sesión</b> Las credenciales se guardan en el equipo. Para quitarlas: <em>Administrador de credenciales</em> en Windows, <em>Llavero</em> en macOS, o <code>gh auth logout</code>.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">08 · Clone</div>
+    <h2>Empezar desde GitHub: <code>git clone</code></h2>
+    <pre class="term"><span class="p">$</span> git clone https://github.com/usuario/proyecto.git
+<span class="p">$</span> cd proyecto
+<span class="p">$</span> git remote -v
+<span class="o">origin  https://github.com/usuario/proyecto.git (fetch)
+origin  https://github.com/usuario/proyecto.git (push)</span></pre>
+    <p>Descarga el repositorio con todo su historial y deja configurada la conexión <code>origin</code>. Es la forma más sencilla de empezar.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">08 · Remote</div>
+    <h2>Subir un repositorio que ya tienes en local</h2>
+    <pre class="term"><span class="c"># 1. Conectar con el repositorio de GitHub (creado VACÍO)</span>
+<span class="p">$</span> git remote add origin https://github.com/usuario/proyecto.git
+
+<span class="c"># 2. Subir la rama main y recordar la conexión (-u)</span>
+<span class="p">$</span> git push -u origin main
+
+<span class="c"># A partir de aquí basta con:</span>
+<span class="p">$</span> git push
+<span class="p">$</span> git pull</pre>
+    <div class="tip"><b>origin</b> es solo el nombre que se le suele dar a la conexión. <code>-u</code> (<code>--set-upstream</code>) vincula tu rama local con la remota para no tener que repetirlo.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">08 · El ciclo diario</div>
+    <h2>Pull → cambios → commit → push</h2>
+    <pre class="term"><span class="p">$</span> git pull                          <span class="c"># 1. trae lo último</span>
+<span class="c"># 2. haz tus cambios</span>
+<span class="p">$</span> git add .
+<span class="p">$</span> git commit -m "Añade la sección de contacto"   <span class="c"># 3. guarda</span>
+<span class="p">$</span> git push                          <span class="c"># 4. sube</span></pre>
+    <div class="cols">
+      <div class="card"><h3>git fetch</h3><p>Descarga los cambios del remoto, pero <strong>no toca</strong> tus archivos. Sirve para mirar antes de mezclar.</p></div>
+      <div class="card"><h3>git pull</h3><p>Es <code>git fetch</code> + <code>git merge</code>: descarga y fusiona con tu rama en un solo paso.</p></div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">08 · Posibles problemas</div>
+    <h2>Errores típicos al hacer push</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>rejected · fetch first</h3>
+        <p>Alguien subió cambios antes que tú y tu rama no está actualizada.</p>
+        <p style="margin-top:8px"><strong>Solución:</strong> <code>git pull</code>, resuelve conflictos si los hay, y vuelve a hacer <code>git push</code>.</p>
+      </div>
+      <div class="card">
+        <h3>unrelated histories</h3>
+        <p>Creaste el repo de GitHub con README o licencia y en local ya tenías otro historial.</p>
+        <p style="margin-top:8px"><strong>Solución:</strong> crea el repo de GitHub vacío o usa <code>git pull origin main --allow-unrelated-histories</code>.</p>
+      </div>
+    </div>
+    <div class="warn"><b>Nunca</b> uses <code>git push --force</code> en una rama compartida: borra el trabajo de los demás. Si es imprescindible, <code>--force-with-lease</code> es la versión segura.</div>
+  </section>
+
+  <!-- ===================== 09 · COLABORAR ===================== -->
+  <section class="slide divider">
+    <div class="num">09</div>
+    <h2>Colaborar en GitHub</h2>
+    <p class="lead">Issues, Pull Requests y forks.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">09 · Issues</div>
+    <h2>Issues: la lista de tareas del proyecto</h2>
+    <div class="cols">
+      <ul>
+        <li>Notificar errores, proponer ideas o repartir tareas.</li>
+        <li>Se pueden asignar a personas y clasificar con <strong>labels</strong> (<code>bug</code>, <code>good first issue</code>…).</li>
+        <li>Se comentan con Markdown y se mencionan personas con <code>@usuario</code>.</li>
+        <li>Cada issue tiene un número: <code>#12</code>.</li>
+      </ul>
+      <div class="card">
+        <h3>Cerrar issues desde un commit o PR</h3>
+        <pre class="term">Corrige el menú en móvil
+
+Closes #12</pre>
+        <p style="margin-top:10px">Al fusionarse en <code>main</code>, GitHub cierra la issue #12 automáticamente. También vale <code>Fixes</code> o <code>Resolves</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">09 · Pull Requests</div>
+    <h2>Pull Request: "por favor, fusiona mi rama"</h2>
+    <p>Una PR es una propuesta para fusionar una rama en otra, con un espacio para <strong>revisar el código</strong> antes de que entre en <code>main</code>.</p>
+    <ol style="margin:0;padding-left:1.4em">
+      <li>Crea una rama: <code>git switch -c fix/menu-movil</code></li>
+      <li>Haz tus commits y súbela: <code>git push -u origin fix/menu-movil</code></li>
+      <li>En GitHub pulsa <strong>Compare &amp; pull request</strong>, explica el cambio y pide revisión.</li>
+      <li>Tus compañeros comentan línea a línea, aprueban o piden cambios.</li>
+      <li>Si hace falta, sigue haciendo commits en la misma rama: la PR se actualiza sola.</li>
+      <li>Pulsa <strong>Merge</strong> y borra la rama.</li>
+    </ol>
+    <div class="tip"><b>Desde la terminal</b> <code>gh pr create</code>, <code>gh pr list</code>, <code>gh pr checkout 7</code>, <code>gh pr merge</code>.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">09 · Tipos de merge</div>
+    <h2>Tres formas de fusionar una PR</h2>
+    <div class="cols-3">
+      <div class="card"><h3>Merge commit</h3><p>Conserva todos los commits de la rama y añade un commit de merge.</p></div>
+      <div class="card"><h3>Squash and merge</h3><p>Junta todos los commits de la PR en <strong>uno solo</strong>. Historial muy limpio.</p></div>
+      <div class="card"><h3>Rebase and merge</h3><p>Coloca los commits uno tras otro sobre <code>main</code>, sin commit de merge.</p></div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">09 · Forks</div>
+    <h2>Contribuir a un proyecto ajeno</h2>
+    <p>Si no tienes permiso para escribir en un repositorio, trabajas sobre tu <strong>fork</strong>:</p>
+    <pre class="term"><span class="c"># 1. Botón Fork en GitHub → crea usuario/proyecto en tu cuenta</span>
+<span class="p">$</span> git clone https://github.com/TU-USUARIO/proyecto.git
+<span class="p">$</span> git remote add upstream https://github.com/AUTOR/proyecto.git
+
+<span class="c"># 2. Trabaja en una rama y súbela a TU fork</span>
+<span class="p">$</span> git switch -c mejora-readme
+<span class="p">$</span> git push -u origin mejora-readme
+<span class="c"># 3. Abre la Pull Request desde tu fork hacia el repo original</span>
+
+<span class="c"># Mantener tu fork al día con el original</span>
+<span class="p">$</span> git fetch upstream
+<span class="p">$</span> git merge upstream/main</pre>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">09 · Trabajo en equipo</div>
+    <h2>Proteger la rama main</h2>
+    <div class="cols">
+      <div>
+        <p>En <em>Settings → Branches → Branch protection rules</em> (o <em>Rulesets</em>) puedes obligar a que:</p>
+        <ul>
+          <li>Nadie haga push directo a <code>main</code>.</li>
+          <li>Toda PR tenga al menos una aprobación.</li>
+          <li>Los tests automáticos pasen antes de fusionar.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>GitHub Flow</h3>
+        <p>El flujo de trabajo más sencillo:</p>
+        <ol style="margin:8px 0 0;padding-left:1.3em">
+          <li><code>main</code> siempre funciona.</li>
+          <li>Cada cambio en su rama.</li>
+          <li>Pull Request y revisión.</li>
+          <li>Merge y desplegar.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="note"><b>Plantillas</b> Este repo incluye plantillas en <code>.github/</code> que GitHub usa al abrir una Issue o una PR.</div>
+  </section>
+
+  <!-- ===================== 10 · ACTIONS Y PAGES ===================== -->
+  <section class="slide divider">
+    <div class="num">10</div>
+    <h2>GitHub Actions y Pages</h2>
+    <p class="lead">Automatizar tareas y publicar webs gratis.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">10 · Actions</div>
+    <h2>GitHub Actions</h2>
+    <div class="cols">
+      <div>
+        <p>Programas que GitHub ejecuta por ti cuando ocurre algo en el repo: un push, una PR, una fecha…</p>
+        <ul>
+          <li>Pasar los tests en cada PR.</li>
+          <li>Revisar el estilo del código.</li>
+          <li>Publicar la web o la app.</li>
+        </ul>
+        <p style="margin-top:10px">Se definen en archivos YAML dentro de <code>.github/workflows/</code>.</p>
+      </div>
+      <pre class="term"><span class="c"># .github/workflows/saludo.yml</span>
+name: Saludo
+on: [push]            <span class="c"># cuándo se ejecuta</span>
+jobs:
+  saludar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "¡Hola desde Actions!"</pre>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">10 · Pages</div>
+    <h2>Publicar una web con GitHub Pages</h2>
+    <p>GitHub sirve gratis archivos HTML de tu repo en <code>https://usuario.github.io/repositorio/</code>.</p>
+    <ol style="margin:0;padding-left:1.4em">
+      <li>En el repo: <em>Settings → Pages</em>.</li>
+      <li>En <strong>Source</strong> elige <strong>GitHub Actions</strong> (o una rama y carpeta).</li>
+      <li>Haz push a <code>main</code> y espera a que termine la Action.</li>
+    </ol>
+    <div class="tip"><b>Esta presentación</b> se publica así: mira <code>.github/workflows/pages.yml</code> en este repositorio.</div>
+  </section>
+
+  <!-- ===================== 11 · GUI Y BUENAS PRÁCTICAS ===================== -->
+  <section class="slide divider">
+    <div class="num">11</div>
+    <h2>Interfaces gráficas y buenas prácticas</h2>
+    <p class="lead">Lo mismo, con ratón. Y cómo no meterse en líos.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">11 · GUI</div>
+    <h2>Git sin comandos</h2>
+    <p>Todo lo visto se puede hacer con una interfaz gráfica. Conviene saber los comandos para entender qué hace cada botón.</p>
+    <div class="cols-3">
+      <div class="card">
+        <h3>VS Code</h3>
+        <p>Pestaña <strong>Source Control</strong> (<code>Ctrl+Shift+G</code>): stage con <strong>+</strong>, commit, ramas y sync. Y la terminal integrada con <code>Ctrl+ñ</code>.</p>
+      </div>
+      <div class="card">
+        <h3>GitHub Desktop</h3>
+        <p>La app oficial de GitHub, muy sencilla para empezar. Windows y macOS.</p>
+      </div>
+      <div class="card">
+        <h3>Sourcetree</h3>
+        <p>Gratuita, con vista detallada del historial y las ramas. <a href="https://www.sourcetreeapp.com/">sourcetreeapp.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">11 · Buenas prácticas</div>
+    <h2>Diez consejos</h2>
+    <div class="cols">
+      <ol style="margin:0;padding-left:1.4em">
+        <li><code>git status</code> antes de cada comando.</li>
+        <li>Commits pequeños y con buen mensaje.</li>
+        <li><code>git pull</code> antes de empezar a trabajar.</li>
+        <li>Una rama por tarea; <code>main</code> siempre funciona.</li>
+        <li>Revisa con <code>git diff</code> antes de hacer commit.</li>
+      </ol>
+      <ol start="6" style="margin:0;padding-left:1.4em">
+        <li>Nunca subas contraseñas ni <code>.env</code>.</li>
+        <li>No hagas <code>reset</code> ni <code>rebase</code> de lo ya subido.</li>
+        <li>Nada de <code>push --force</code> en ramas compartidas.</li>
+        <li>Un README que explique el proyecto.</li>
+        <li>Ante el pánico: <code>git reflog</code>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Chuleta</div>
+    <h2>Los comandos del curso</h2>
+    <div class="cols">
+      <dl class="cmds">
+        <dt><code>git init</code></dt><dd>crear repo</dd>
+        <dt><code>git clone url</code></dt><dd>copiar repo</dd>
+        <dt><code>git status</code></dt><dd>estado</dd>
+        <dt><code>git add .</code></dt><dd>preparar</dd>
+        <dt><code>git commit -m ""</code></dt><dd>guardar</dd>
+        <dt><code>git log --oneline</code></dt><dd>historial</dd>
+        <dt><code>git diff</code></dt><dd>ver cambios</dd>
+        <dt><code>git restore</code></dt><dd>descartar</dd>
+      </dl>
+      <dl class="cmds">
+        <dt><code>git switch -c rama</code></dt><dd>nueva rama</dd>
+        <dt><code>git merge rama</code></dt><dd>fusionar</dd>
+        <dt><code>git stash</code></dt><dd>aparcar</dd>
+        <dt><code>git revert hash</code></dt><dd>deshacer seguro</dd>
+        <dt><code>git reset --soft</code></dt><dd>deshacer local</dd>
+        <dt><code>git pull</code></dt><dd>traer</dd>
+        <dt><code>git push</code></dt><dd>subir</dd>
+        <dt><code>git reflog</code></dt><dd>rescatar</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Práctica</div>
+    <h2>Ejercicio: usa lo aprendido</h2>
+    <ol style="margin:0;padding-left:1.4em">
+      <li>Haz un <strong>fork</strong> de este repositorio y clónalo.</li>
+      <li>Ejecuta <code>git log --oneline --graph</code> y lee los mensajes: cada commit explica una parte del curso.</li>
+      <li>El PDF original se borró del repo… pero sigue en el historial. Encuéntralo y recupéralo con <code>git log --all -- "*.pdf"</code> y <code>git restore --source</code>.</li>
+      <li>Crea una rama, añade tu nombre a la lista de participantes del <code>README.md</code> y haz commit.</li>
+      <li>Súbela y abre una <strong>Pull Request</strong> al repositorio original.</li>
+    </ol>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Para seguir aprendiendo</div>
+    <h2>Recursos</h2>
+    <ul>
+      <li><a href="https://git-scm.com/book/es/v2">Pro Git</a>: el libro oficial, gratis y en español.</li>
+      <li><a href="https://learngitbranching.js.org/?locale=es_ES">Learn Git Branching</a>: aprende ramas jugando.</li>
+      <li><a href="https://skills.github.com/">GitHub Skills</a>: cursos interactivos dentro de GitHub.</li>
+      <li><a href="https://docs.github.com/es">Documentación de GitHub</a> en español.</li>
+      <li><a href="https://ohshitgit.com/es">Oh Shit, Git!?!</a>: soluciones para cuando algo sale mal.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Fin</div>
+    <h1>¡Gracias!</h1>
+    <p class="lead">Por formar parte de la formación.</p>
+    <p style="color:var(--muted)">Formación impartida por Alejandro Martín · ESOLIUPO</p>
+  </section>
+
+</main>
+
+<nav class="hud" aria-label="Navegación de diapositivas">
+  <span class="brand">Git y GitHub · ESOLIUPO</span>
+  <span id="counter">1 / 1</span>
+  <span>
+    <button id="prev" aria-label="Diapositiva anterior">←</button>
+    <button id="next" aria-label="Diapositiva siguiente">→</button>
+  </span>
+</nav>
+
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let current = 0;
+
+  function show(i) {
+    current = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, n) => s.classList.toggle('active', n === current));
+    slides[current].scrollTop = 0;
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    progress.style.width = ((current + 1) / slides.length * 100) + '%';
+    if (location.hash !== '#' + (current + 1)) history.replaceState(null, '', '#' + (current + 1));
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(current + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(current - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+  });
+  document.getElementById('next').onclick = () => show(current + 1);
+  document.getElementById('prev').onclick = () => show(current - 1);
+
+  let x0 = null;
+  document.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+
+  window.addEventListener('hashchange', () => show(parseInt(location.hash.slice(1), 10) - 1 || 0));
+  show(parseInt(location.hash.slice(1), 10) - 1 || 0);
+})();
+</script>
+</body>
+</html>
