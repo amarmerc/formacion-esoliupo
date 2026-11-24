@@ -737,6 +737,122 @@ build/
     <p>Aplica los cambios de un commit concreto en la rama actual, creando un commit nuevo. Útil para llevar un arreglo urgente a <code>main</code> sin fusionar toda la rama.</p>
   </section>
 
+  <!-- ===================== 07 · GITHUB ===================== -->
+  <section class="slide divider">
+    <div class="num">07</div>
+    <h2>Introducción a GitHub</h2>
+    <p class="lead">Tu repositorio en la nube, listo para colaborar.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">07 · GitHub</div>
+    <h2>¿Qué es GitHub?</h2>
+    <div class="cols">
+      <div>
+        <p>Una plataforma web que <strong>aloja repositorios Git</strong> y añade todo lo necesario para trabajar en equipo:</p>
+        <ul>
+          <li>Copia de seguridad en la nube.</li>
+          <li>Issues para tareas y errores.</li>
+          <li>Pull Requests para revisar código.</li>
+          <li>Automatización con Actions.</li>
+          <li>Webs gratis con Pages.</li>
+          <li>Tu perfil: un portfolio de tus proyectos.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Crear un repositorio</h3>
+        <ol style="margin:0;padding-left:1.3em">
+          <li>Botón <strong>New</strong> (o el <strong>+</strong> de arriba a la derecha).</li>
+          <li>Nombre y descripción.</li>
+          <li><strong>Público</strong> o <strong>privado</strong>.</li>
+          <li>Opcional: README, <code>.gitignore</code> y licencia.</li>
+        </ol>
+        <p style="margin-top:10px;color:var(--muted)">Si vas a subir un repo que ya tienes en local, créalo <strong>vacío</strong> (sin README ni licencia).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">07 · README</div>
+    <h2>El README.md y Markdown</h2>
+    <div class="cols">
+      <div>
+        <p>El <code>README.md</code> es la portada del repositorio: GitHub lo muestra debajo de los archivos. Debe explicar <strong>qué es</strong> el proyecto, <strong>cómo se usa</strong> y <strong>cómo contribuir</strong>.</p>
+        <p style="margin-top:12px">Se escribe en <strong>Markdown</strong>, un formato de texto sencillo.</p>
+      </div>
+      <pre class="term"># Título
+## Subtítulo
+
+**negrita** y *cursiva*
+
+- elemento de lista
+1. lista numerada
+
+[enlace](https://github.com)
+![imagen](logo.png)
+
+`código en línea`
+
+- [ ] tarea pendiente
+- [x] tarea hecha</pre>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">07 · Licencias</div>
+    <h2>¿Para qué sirve la licencia?</h2>
+    <div class="cols">
+      <ul>
+        <li>Sin licencia, el código es <strong>"todos los derechos reservados"</strong> por defecto, aunque el repo sea público.</li>
+        <li>Dice qué se puede hacer con tu código y qué no.</li>
+        <li>Protege al autor de responsabilidades.</li>
+      </ul>
+      <div>
+        <div class="card soft" style="margin-bottom:14px">
+          <h3>Permisivas · MIT, Apache 2.0</h3>
+          <p>Se puede usar para cualquier cosa, incluso cerrada o comercial, siempre que se dé crédito al autor.</p>
+        </div>
+        <div class="card mid">
+          <h3>Copyleft · GNU GPL</h3>
+          <p>Quien distribuya una versión modificada debe publicarla también como código abierto con la misma licencia.</p>
+        </div>
+      </div>
+    </div>
+    <div class="tip"><b>Ayuda</b> <a href="https://choosealicense.com/">choosealicense.com</a> te ayuda a elegir. Este repositorio usa la licencia MIT.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">07 · La interfaz</div>
+    <h2>Pestañas de un repositorio</h2>
+    <dl class="cmds">
+      <dt><code>Code</code></dt><dd>Los archivos del proyecto, el README y el botón para clonar.</dd>
+      <dt><code>Issues</code></dt><dd>Errores, ideas y tareas que cualquiera puede notificar.</dd>
+      <dt><code>Pull requests</code></dt><dd>Propuestas de cambios para revisar y fusionar.</dd>
+      <dt><code>Actions</code></dt><dd>Automatizaciones: tests, despliegues…</dd>
+      <dt><code>Projects</code></dt><dd>Tableros para organizarte con tu equipo.</dd>
+      <dt><code>Wiki</code></dt><dd>Documentación extensa del proyecto.</dd>
+      <dt><code>Security</code></dt><dd>Avisos de vulnerabilidades y ajustes de seguridad.</dd>
+      <dt><code>Insights</code></dt><dd>Estadísticas: contribuidores, actividad, tráfico.</dd>
+      <dt><code>Settings</code></dt><dd>Configuración: colaboradores, ramas protegidas, Pages…</dd>
+    </dl>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">07 · Interaccionar con otros repos</div>
+    <h2>Watch, Star, Fork y Clone</h2>
+    <div class="cols">
+      <dl class="cmds">
+        <dt><code>Watch</code></dt><dd>Elige qué notificaciones recibes: todas, solo menciones o ninguna.</dd>
+        <dt><code>Star</code></dt><dd>Como un "me gusta" o marcador: guardas el repo en tus favoritos.</dd>
+      </dl>
+      <dl class="cmds">
+        <dt><code>Fork</code></dt><dd>Copia el repo en <strong>tu cuenta de GitHub</strong> para trabajar en él por tu cuenta.</dd>
+        <dt><code>Clone</code></dt><dd>Copia el repo en <strong>tu ordenador</strong>, con todo el historial.</dd>
+        <dt><code>Download ZIP</code></dt><dd>Solo los archivos actuales, <strong>sin</strong> historial ni Git.</dd>
+      </dl>
+    </div>
+  </section>
+
   <!-- SLIDES -->
 
 </main>
