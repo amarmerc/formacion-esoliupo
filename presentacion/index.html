@@ -938,6 +938,102 @@ origin  https://github.com/usuario/proyecto.git (push)</span></pre>
     <div class="warn"><b>Nunca</b> uses <code>git push --force</code> en una rama compartida: borra el trabajo de los demás. Si es imprescindible, <code>--force-with-lease</code> es la versión segura.</div>
   </section>
 
+  <!-- ===================== 09 · COLABORAR ===================== -->
+  <section class="slide divider">
+    <div class="num">09</div>
+    <h2>Colaborar en GitHub</h2>
+    <p class="lead">Issues, Pull Requests y forks.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">09 · Issues</div>
+    <h2>Issues: la lista de tareas del proyecto</h2>
+    <div class="cols">
+      <ul>
+        <li>Notificar errores, proponer ideas o repartir tareas.</li>
+        <li>Se pueden asignar a personas y clasificar con <strong>labels</strong> (<code>bug</code>, <code>good first issue</code>…).</li>
+        <li>Se comentan con Markdown y se mencionan personas con <code>@usuario</code>.</li>
+        <li>Cada issue tiene un número: <code>#12</code>.</li>
+      </ul>
+      <div class="card">
+        <h3>Cerrar issues desde un commit o PR</h3>
+        <pre class="term">Corrige el menú en móvil
+
+Closes #12</pre>
+        <p style="margin-top:10px">Al fusionarse en <code>main</code>, GitHub cierra la issue #12 automáticamente. También vale <code>Fixes</code> o <code>Resolves</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">09 · Pull Requests</div>
+    <h2>Pull Request: "por favor, fusiona mi rama"</h2>
+    <p>Una PR es una propuesta para fusionar una rama en otra, con un espacio para <strong>revisar el código</strong> antes de que entre en <code>main</code>.</p>
+    <ol style="margin:0;padding-left:1.4em">
+      <li>Crea una rama: <code>git switch -c fix/menu-movil</code></li>
+      <li>Haz tus commits y súbela: <code>git push -u origin fix/menu-movil</code></li>
+      <li>En GitHub pulsa <strong>Compare &amp; pull request</strong>, explica el cambio y pide revisión.</li>
+      <li>Tus compañeros comentan línea a línea, aprueban o piden cambios.</li>
+      <li>Si hace falta, sigue haciendo commits en la misma rama: la PR se actualiza sola.</li>
+      <li>Pulsa <strong>Merge</strong> y borra la rama.</li>
+    </ol>
+    <div class="tip"><b>Desde la terminal</b> <code>gh pr create</code>, <code>gh pr list</code>, <code>gh pr checkout 7</code>, <code>gh pr merge</code>.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">09 · Tipos de merge</div>
+    <h2>Tres formas de fusionar una PR</h2>
+    <div class="cols-3">
+      <div class="card"><h3>Merge commit</h3><p>Conserva todos los commits de la rama y añade un commit de merge.</p></div>
+      <div class="card"><h3>Squash and merge</h3><p>Junta todos los commits de la PR en <strong>uno solo</strong>. Historial muy limpio.</p></div>
+      <div class="card"><h3>Rebase and merge</h3><p>Coloca los commits uno tras otro sobre <code>main</code>, sin commit de merge.</p></div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">09 · Forks</div>
+    <h2>Contribuir a un proyecto ajeno</h2>
+    <p>Si no tienes permiso para escribir en un repositorio, trabajas sobre tu <strong>fork</strong>:</p>
+    <pre class="term"><span class="c"># 1. Botón Fork en GitHub → crea usuario/proyecto en tu cuenta</span>
+<span class="p">$</span> git clone https://github.com/TU-USUARIO/proyecto.git
+<span class="p">$</span> git remote add upstream https://github.com/AUTOR/proyecto.git
+
+<span class="c"># 2. Trabaja en una rama y súbela a TU fork</span>
+<span class="p">$</span> git switch -c mejora-readme
+<span class="p">$</span> git push -u origin mejora-readme
+<span class="c"># 3. Abre la Pull Request desde tu fork hacia el repo original</span>
+
+<span class="c"># Mantener tu fork al día con el original</span>
+<span class="p">$</span> git fetch upstream
+<span class="p">$</span> git merge upstream/main</pre>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">09 · Trabajo en equipo</div>
+    <h2>Proteger la rama main</h2>
+    <div class="cols">
+      <div>
+        <p>En <em>Settings → Branches → Branch protection rules</em> (o <em>Rulesets</em>) puedes obligar a que:</p>
+        <ul>
+          <li>Nadie haga push directo a <code>main</code>.</li>
+          <li>Toda PR tenga al menos una aprobación.</li>
+          <li>Los tests automáticos pasen antes de fusionar.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>GitHub Flow</h3>
+        <p>El flujo de trabajo más sencillo:</p>
+        <ol style="margin:8px 0 0;padding-left:1.3em">
+          <li><code>main</code> siempre funciona.</li>
+          <li>Cada cambio en su rama.</li>
+          <li>Pull Request y revisión.</li>
+          <li>Merge y desplegar.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="note"><b>Plantillas</b> Este repo incluye plantillas en <code>.github/</code> que GitHub usa al abrir una Issue o una PR.</div>
+  </section>
+
   <!-- SLIDES -->
 
 </main>
