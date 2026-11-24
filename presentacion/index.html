@@ -852,6 +852,92 @@ build/
     </div>
   </section>
 
+  <!-- ===================== 08 · REMOTOS ===================== -->
+  <section class="slide divider">
+    <div class="num">08</div>
+    <h2>Trabajar con remotos</h2>
+    <p class="lead">Conectar tu repositorio local con GitHub.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">08 · Autenticación</div>
+    <h2>Iniciar sesión desde la terminal</h2>
+    <p>GitHub <strong>no acepta tu contraseña</strong> en la terminal. Tienes tres opciones:</p>
+    <div class="cols-3">
+      <div class="card">
+        <h3>GitHub CLI <span class="badge">recomendado</span></h3>
+        <p>Instala <code>gh</code> y ejecuta <code>gh auth login</code>. Se encarga de todo.</p>
+      </div>
+      <div class="card">
+        <h3>Token (HTTPS)</h3>
+        <p><em>Settings → Developer settings → Personal access tokens</em>. Al hacer push, usuario + token como contraseña.</p>
+      </div>
+      <div class="card">
+        <h3>Clave SSH</h3>
+        <p><code>ssh-keygen -t ed25519</code> y pega la clave pública en <em>Settings → SSH keys</em>. Clona con <code>git@github.com:…</code></p>
+      </div>
+    </div>
+    <div class="note"><b>Cerrar sesión</b> Las credenciales se guardan en el equipo. Para quitarlas: <em>Administrador de credenciales</em> en Windows, <em>Llavero</em> en macOS, o <code>gh auth logout</code>.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">08 · Clone</div>
+    <h2>Empezar desde GitHub: <code>git clone</code></h2>
+    <pre class="term"><span class="p">$</span> git clone https://github.com/usuario/proyecto.git
+<span class="p">$</span> cd proyecto
+<span class="p">$</span> git remote -v
+<span class="o">origin  https://github.com/usuario/proyecto.git (fetch)
+origin  https://github.com/usuario/proyecto.git (push)</span></pre>
+    <p>Descarga el repositorio con todo su historial y deja configurada la conexión <code>origin</code>. Es la forma más sencilla de empezar.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">08 · Remote</div>
+    <h2>Subir un repositorio que ya tienes en local</h2>
+    <pre class="term"><span class="c"># 1. Conectar con el repositorio de GitHub (creado VACÍO)</span>
+<span class="p">$</span> git remote add origin https://github.com/usuario/proyecto.git
+
+<span class="c"># 2. Subir la rama main y recordar la conexión (-u)</span>
+<span class="p">$</span> git push -u origin main
+
+<span class="c"># A partir de aquí basta con:</span>
+<span class="p">$</span> git push
+<span class="p">$</span> git pull</pre>
+    <div class="tip"><b>origin</b> es solo el nombre que se le suele dar a la conexión. <code>-u</code> (<code>--set-upstream</code>) vincula tu rama local con la remota para no tener que repetirlo.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">08 · El ciclo diario</div>
+    <h2>Pull → cambios → commit → push</h2>
+    <pre class="term"><span class="p">$</span> git pull                          <span class="c"># 1. trae lo último</span>
+<span class="c"># 2. haz tus cambios</span>
+<span class="p">$</span> git add .
+<span class="p">$</span> git commit -m "Añade la sección de contacto"   <span class="c"># 3. guarda</span>
+<span class="p">$</span> git push                          <span class="c"># 4. sube</span></pre>
+    <div class="cols">
+      <div class="card"><h3>git fetch</h3><p>Descarga los cambios del remoto, pero <strong>no toca</strong> tus archivos. Sirve para mirar antes de mezclar.</p></div>
+      <div class="card"><h3>git pull</h3><p>Es <code>git fetch</code> + <code>git merge</code>: descarga y fusiona con tu rama en un solo paso.</p></div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">08 · Posibles problemas</div>
+    <h2>Errores típicos al hacer push</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>rejected · fetch first</h3>
+        <p>Alguien subió cambios antes que tú y tu rama no está actualizada.</p>
+        <p style="margin-top:8px"><strong>Solución:</strong> <code>git pull</code>, resuelve conflictos si los hay, y vuelve a hacer <code>git push</code>.</p>
+      </div>
+      <div class="card">
+        <h3>unrelated histories</h3>
+        <p>Creaste el repo de GitHub con README o licencia y en local ya tenías otro historial.</p>
+        <p style="margin-top:8px"><strong>Solución:</strong> crea el repo de GitHub vacío o usa <code>git pull origin main --allow-unrelated-histories</code>.</p>
+      </div>
+    </div>
+    <div class="warn"><b>Nunca</b> uses <code>git push --force</code> en una rama compartida: borra el trabajo de los demás. Si es imprescindible, <code>--force-with-lease</code> es la versión segura.</div>
+  </section>
+
   <!-- SLIDES -->
 
 </main>
