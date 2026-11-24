@@ -163,7 +163,7 @@
 
   <section class="slide">
     <div class="kicker">Índice</div>
-    <h2>Qué vamos a ver</h2>
+    <h2>Contenidos</h2>
     <div class="cols">
       <ul>
         <li><strong>00</strong> · La terminal</li>
@@ -230,7 +230,7 @@
 
   <section class="slide">
     <div class="kicker">01 · Qué es Git</div>
-    <h2>Una máquina del tiempo para tu proyecto</h2>
+    <h2>Para qué sirve Git</h2>
     <div class="cols">
       <div>
         <p>Git registra los cambios de tus archivos para que puedas:</p>
@@ -312,13 +312,13 @@ trabajo_final_DEFINITIVO_ahora_si.docx</pre>
         <text x="370" y="290" fill="#a3a3a3">switch / restore</text>
       </g>
     </svg>
-    <p>Cada comando que veamos mueve cambios de una zona a otra. Si entiendes este dibujo, entiendes Git.</p>
+    <p>Cada comando que veamos mueve cambios de una zona a otra.</p>
   </section>
 
   <!-- ===================== 02 · PRIMEROS PASOS ===================== -->
   <section class="slide divider">
     <div class="num">02</div>
-    <h2>Empezamos con Git</h2>
+    <h2>Primeros pasos con Git</h2>
     <p class="lead">Configurar, crear un repositorio y guardar los primeros cambios.</p>
   </section>
 
@@ -354,7 +354,7 @@ Untracked files:
         index.html</span></pre>
     <ul>
       <li><code>git init</code> crea la carpeta oculta <code>.git</code>: <strong>ahí vive todo el historial</strong>. Si la borras, pierdes el repositorio.</li>
-      <li><code>git status</code> es tu mejor amigo: úsalo antes y después de cada comando.</li>
+      <li>Conviene ejecutar <code>git status</code> antes y después de cada comando.</li>
       <li>¿Dudas? <code>git help commit</code> o <code>git commit --help</code> abre el manual (sal con <code>q</code>).</li>
     </ul>
   </section>
@@ -440,7 +440,7 @@ Untracked files:
 
   <section class="slide">
     <div class="kicker">03 · Comparar</div>
-    <h2>¿Qué he cambiado? <code>git diff</code></h2>
+    <h2>Comparar cambios: <code>git diff</code></h2>
     <pre class="term"><span class="c"># Cambios aún no preparados (directorio de trabajo vs. staging)</span>
 <span class="p">$</span> git diff
 
@@ -502,7 +502,7 @@ Untracked files:
     <div class="cols-3">
       <div class="card hard">
         <h3>--hard</h3>
-        <p>El más brutal. Borra los commits <strong>y</strong> todos los cambios en los archivos.</p>
+        <p>El más destructivo. Borra los commits <strong>y</strong> todos los cambios en los archivos.</p>
       </div>
       <div class="card mid">
         <h3>--mixed <span class="badge">por defecto</span></h3>
@@ -519,7 +519,7 @@ Untracked files:
 
   <section class="slide">
     <div class="kicker">03 · Red de seguridad</div>
-    <h2>"La he liado": <code>git reflog</code></h2>
+    <h2>Recuperar commits perdidos: <code>git reflog</code></h2>
     <pre class="term"><span class="p">$</span> git reset --hard HEAD~3        <span class="c"># ¡ups! adiós a 3 commits</span>
 <span class="p">$</span> git reflog
 <span class="o">4c5d6e7 HEAD@{0}: reset: moving to HEAD~3
@@ -530,7 +530,7 @@ a1b2c3d HEAD@{1}: commit: Corrige erratas de la conclusión</span>
 
   <section class="slide">
     <div class="kicker">03 · Resumen</div>
-    <h2>¿Qué comando uso para deshacer?</h2>
+    <h2>Cómo deshacer, según el caso</h2>
     <dl class="cmds">
       <dt>Editado, sin <code>add</code></dt><dd><code>git restore archivo</code></dd>
       <dt>Ya con <code>add</code></dt><dd><code>git restore --staged archivo</code></dd>
@@ -652,7 +652,7 @@ node_modules/
   <section class="slide">
     <div class="kicker">05 · Conflictos</div>
     <h2>Conflictos de merge</h2>
-    <p>Ocurren cuando las dos ramas cambian <strong>las mismas líneas</strong> del mismo archivo. Git no adivina: te pregunta.</p>
+    <p>Ocurren cuando las dos ramas cambian <strong>las mismas líneas</strong> del mismo archivo. Git no los resuelve solo y te pide que elijas.</p>
     <pre class="term"><span class="o">CONFLICT (content): Merge conflict in index.html</span>
 
 &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
@@ -788,7 +788,7 @@ node_modules/
 
   <section class="slide">
     <div class="kicker">07 · Licencias</div>
-    <h2>¿Para qué sirve la licencia?</h2>
+    <h2>Licencias de software</h2>
     <div class="cols">
       <ul>
         <li>Sin licencia, el código es <strong>"todos los derechos reservados"</strong> por defecto, aunque el repo sea público.</li>
@@ -855,7 +855,7 @@ node_modules/
     <div class="cols-3">
       <div class="card">
         <h3>GitHub CLI <span class="badge">recomendado</span></h3>
-        <p>Instala <code>gh</code> y ejecuta <code>gh auth login</code>. Se encarga de todo.</p>
+        <p>Instala <code>gh</code> y ejecuta <code>gh auth login</code>. Guarda las credenciales para que Git las use.</p>
       </div>
       <div class="card">
         <h3>Token (HTTPS)</h3>
@@ -956,7 +956,7 @@ Closes #12</pre>
 
   <section class="slide">
     <div class="kicker">09 · Pull Requests</div>
-    <h2>Pull Request: "por favor, fusiona mi rama"</h2>
+    <h2>Pull Requests: proponer y revisar cambios</h2>
     <p>Una PR es una propuesta para fusionar una rama en otra, con un espacio para <strong>revisar el código</strong> antes de que entre en <code>main</code>.</p>
     <ol style="margin:0;padding-left:1.4em">
       <li>Crea una rama: <code>git switch -c fix/menu-movil</code></li>
@@ -1071,7 +1071,7 @@ jobs:
   <section class="slide divider">
     <div class="num">11</div>
     <h2>Interfaces gráficas y buenas prácticas</h2>
-    <p class="lead">Lo mismo, con ratón. Y cómo no meterse en líos.</p>
+    <p class="lead">Las mismas operaciones desde una interfaz gráfica, y recomendaciones para evitar problemas.</p>
   </section>
 
   <section class="slide">
@@ -1110,7 +1110,7 @@ jobs:
         <li>No hagas <code>reset</code> ni <code>rebase</code> de lo ya subido.</li>
         <li>Nada de <code>push --force</code> en ramas compartidas.</li>
         <li>Un README que explique el proyecto.</li>
-        <li>Ante el pánico: <code>git reflog</code>.</li>
+        <li>Si algo se pierde: <code>git reflog</code>.</li>
       </ol>
     </div>
   </section>
@@ -1144,7 +1144,7 @@ jobs:
 
   <section class="slide">
     <div class="kicker">Práctica</div>
-    <h2>Ejercicio: usa lo aprendido</h2>
+    <h2>Ejercicio final</h2>
     <ol style="margin:0;padding-left:1.4em">
       <li>Haz un <strong>fork</strong> de este repositorio y clónalo.</li>
       <li>Ejecuta <code>git log --oneline --graph</code> y lee los mensajes: cada commit explica una parte del curso.</li>
