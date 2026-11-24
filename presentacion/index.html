@@ -1034,6 +1034,50 @@ Closes #12</pre>
     <div class="note"><b>Plantillas</b> Este repo incluye plantillas en <code>.github/</code> que GitHub usa al abrir una Issue o una PR.</div>
   </section>
 
+  <!-- ===================== 10 · ACTIONS Y PAGES ===================== -->
+  <section class="slide divider">
+    <div class="num">10</div>
+    <h2>GitHub Actions y Pages</h2>
+    <p class="lead">Automatizar tareas y publicar webs gratis.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">10 · Actions</div>
+    <h2>GitHub Actions</h2>
+    <div class="cols">
+      <div>
+        <p>Programas que GitHub ejecuta por ti cuando ocurre algo en el repo: un push, una PR, una fecha…</p>
+        <ul>
+          <li>Pasar los tests en cada PR.</li>
+          <li>Revisar el estilo del código.</li>
+          <li>Publicar la web o la app.</li>
+        </ul>
+        <p style="margin-top:10px">Se definen en archivos YAML dentro de <code>.github/workflows/</code>.</p>
+      </div>
+      <pre class="term"><span class="c"># .github/workflows/saludo.yml</span>
+name: Saludo
+on: [push]            <span class="c"># cuándo se ejecuta</span>
+jobs:
+  saludar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "¡Hola desde Actions!"</pre>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">10 · Pages</div>
+    <h2>Publicar una web con GitHub Pages</h2>
+    <p>GitHub sirve gratis archivos HTML de tu repo en <code>https://usuario.github.io/repositorio/</code>.</p>
+    <ol style="margin:0;padding-left:1.4em">
+      <li>En el repo: <em>Settings → Pages</em>.</li>
+      <li>En <strong>Source</strong> elige <strong>GitHub Actions</strong> (o una rama y carpeta).</li>
+      <li>Haz push a <code>main</code> y espera a que termine la Action.</li>
+    </ol>
+    <div class="tip"><b>Esta presentación</b> se publica así: mira <code>.github/workflows/pages.yml</code> en este repositorio.</div>
+  </section>
+
   <!-- SLIDES -->
 
 </main>
