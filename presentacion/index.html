@@ -676,6 +676,67 @@ build/
     </ol>
   </section>
 
+  <!-- ===================== 06 · HERRAMIENTAS EXTRA ===================== -->
+  <section class="slide divider">
+    <div class="num">06</div>
+    <h2>Herramientas extra</h2>
+    <p class="lead">Stash, etiquetas, rebase y cherry-pick.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">06 · Stash</div>
+    <h2>Guardar cambios a medias: <code>git stash</code></h2>
+    <p>Estás a mitad de algo y necesitas cambiar de rama urgentemente, pero no quieres hacer un commit a medias:</p>
+    <pre class="term"><span class="p">$</span> git stash push -m "formulario a medias"   <span class="c"># guarda y deja el directorio limpio</span>
+<span class="p">$</span> git switch main
+<span class="c"># ... arreglas el bug urgente ...</span>
+<span class="p">$</span> git switch nueva-funcion
+<span class="p">$</span> git stash list                           <span class="c"># ver lo guardado</span>
+<span class="o">stash@{0}: On nueva-funcion: formulario a medias</span>
+<span class="p">$</span> git stash pop                            <span class="c"># recupera y lo borra del stash</span></pre>
+    <div class="note"><b>-u</b> Por defecto <code>stash</code> no guarda archivos nuevos sin seguir; añade <code>-u</code> para incluirlos.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">06 · Tags</div>
+    <h2>Marcar versiones: <code>git tag</code></h2>
+    <pre class="term"><span class="p">$</span> git tag -a v1.0 -m "Primera versión pública"
+<span class="p">$</span> git tag                       <span class="c"># listar</span>
+<span class="p">$</span> git show v1.0
+<span class="p">$</span> git push origin v1.0          <span class="c"># las etiquetas no se suben solas</span></pre>
+    <p>Una etiqueta es un nombre fijo para un commit importante. En GitHub sirven para crear <strong>Releases</strong> con notas de versión y archivos descargables.</p>
+    <div class="tip"><b>Versionado semántico</b> <code>MAYOR.MENOR.PARCHE</code>: <code>v2.0.0</code> rompe compatibilidad, <code>v1.3.0</code> añade funciones, <code>v1.2.1</code> corrige errores.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">06 · Rebase</div>
+    <h2>Merge vs. rebase</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>git merge main</h3>
+        <p>Une las historias con un commit de merge. <strong>No reescribe nada</strong>: seguro siempre.</p>
+      </div>
+      <div class="card">
+        <h3>git rebase main</h3>
+        <p>"Recoloca" tus commits encima del último de <code>main</code>. El historial queda en línea recta, pero <strong>los commits cambian de hash</strong>.</p>
+      </div>
+    </div>
+    <pre class="term"><span class="p">$</span> git switch nueva-funcion
+<span class="p">$</span> git rebase main
+<span class="c"># si hay conflictos: resolver, git add, y luego</span>
+<span class="p">$</span> git rebase --continue          <span class="c"># o git rebase --abort</span></pre>
+    <div class="warn"><b>Regla de oro</b> No hagas rebase de commits que otras personas ya tienen. Úsalo solo en tus ramas locales.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">06 · Cherry-pick</div>
+    <h2>Copiar un commit suelto: <code>git cherry-pick</code></h2>
+    <pre class="term"><span class="c"># Traer a main solo el arreglo hecho en otra rama</span>
+<span class="p">$</span> git switch main
+<span class="p">$</span> git cherry-pick a1b2c3d</pre>
+    <p>Aplica los cambios de un commit concreto en la rama actual, creando un commit nuevo. Útil para llevar un arreglo urgente a <code>main</code> sin fusionar toda la rama.</p>
+  </section>
+
   <!-- SLIDES -->
 
 </main>
