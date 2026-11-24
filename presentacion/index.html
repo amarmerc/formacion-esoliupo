@@ -10,17 +10,17 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #14110f;
-    --bg-2: #1d1916;
-    --panel: #241f1b;
-    --line: #3a322c;
-    --text: #f3ece4;
-    --muted: #a8998b;
-    --accent: #f05033;      /* naranja Git */
-    --accent-2: #f7a541;
+    --bg: #0a0a0a;
+    --bg-2: #141414;
+    --panel: #1a1a1a;
+    --line: #333333;
+    --text: #f5f5f0;
+    --muted: #a3a3a3;
+    --accent: #ffd60a;      /* amarillo principal */
+    --accent-2: #fff3b0;
     --ok: #7bc47f;
-    --info: #6cb4e4;
-    --warn: #e8c547;
+    --info: #ffe766;
+    --warn: #ff9f1c;
     --danger: #ef6b6b;
     --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
     --sans: "Space Grotesk", system-ui, "Segoe UI", sans-serif;
@@ -39,9 +39,7 @@
     overflow-y: auto;
     opacity: 0; visibility: hidden; transform: translateY(12px);
     transition: opacity .35s ease, transform .35s ease, visibility .35s;
-    background:
-      radial-gradient(1200px 600px at 110% -10%, rgba(240,80,51,.10), transparent 60%),
-      var(--bg);
+    background: var(--bg);
   }
   .slide.active { opacity: 1; visibility: visible; transform: none; }
   .slide > * { max-width: 1180px; width: 100%; margin-left: auto; margin-right: auto; }
@@ -64,8 +62,8 @@
   /* Bloque de terminal */
   pre.term {
     margin: 0; font-family: var(--mono); font-size: clamp(13px, 1.45vw, 18px); line-height: 1.6;
-    background: #0d0b0a; border: 1px solid var(--line); border-radius: 12px;
-    padding: 44px 20px 18px; position: relative; overflow-x: auto; color: #e9e2d9;
+    background: #000000; border: 1px solid var(--line); border-radius: 12px;
+    padding: 44px 20px 18px; position: relative; overflow-x: auto; color: #f5f5f0;
   }
   pre.term::before {
     content: ""; position: absolute; top: 14px; left: 16px; width: 12px; height: 12px; border-radius: 50%;
@@ -73,7 +71,7 @@
   }
   pre.term .p { color: var(--accent); user-select: none; }   /* prompt $ */
   pre.term .c { color: var(--muted); }                       /* comentario */
-  pre.term .o { color: #9fd3a2; }                            /* salida */
+  pre.term .o { color: #d9d9d9; }                            /* salida */
 
   /* Lista de comandos */
   dl.cmds { display: grid; grid-template-columns: max-content 1fr; gap: 10px 24px; margin: 0; align-items: baseline; }
@@ -89,16 +87,17 @@
   .card.soft { border-top: 4px solid var(--ok); }
 
   .note, .warn, .tip {
-    border-left: 4px solid var(--info); background: rgba(108,180,228,.08);
+    border-left: 4px solid var(--accent); background: var(--panel);
     padding: 12px 16px; border-radius: 0 10px 10px 0; font-size: clamp(15px, 1.6vw, 20px); line-height: 1.5;
   }
-  .warn { border-color: var(--warn); background: rgba(232,197,71,.08); }
-  .tip  { border-color: var(--ok);   background: rgba(123,196,127,.08); }
+  .warn { border-color: var(--warn); }
+  .tip  { border-color: var(--ok); }
   .note b, .warn b, .tip b { font-family: var(--mono); font-size: .85em; text-transform: uppercase; letter-spacing: .08em; margin-right: 6px; }
 
   /* Diapositivas de sección */
-  .slide.divider { background: radial-gradient(900px 500px at 15% 110%, rgba(240,80,51,.28), transparent 60%), var(--bg-2); }
-  .divider .num { font-family: var(--mono); font-size: clamp(64px, 14vw, 180px); color: var(--accent); line-height: 1; opacity: .9; }
+  .slide.divider { background: var(--accent); }
+  .slide.divider h2, .slide.divider .lead { color: #0a0a0a; }
+  .divider .num { font-family: var(--mono); font-size: clamp(64px, 14vw, 180px); color: #0a0a0a; line-height: 1; }
 
   .badge { display: inline-block; font-family: var(--mono); font-size: 12px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--accent); color: var(--accent); vertical-align: middle; margin-left: 8px; }
 
@@ -110,7 +109,7 @@
     position: fixed; left: 0; right: 0; bottom: 0; height: 56px; z-index: 10;
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
     padding: 0 var(--pad); font-family: var(--mono); font-size: 13px; color: var(--muted);
-    background: linear-gradient(transparent, rgba(0,0,0,.55));
+    background: var(--bg); border-top: 1px solid var(--line);
   }
   .hud button {
     background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 8px;
@@ -278,39 +277,39 @@ trabajo_final_DEFINITIVO_ahora_si.docx</pre>
     <h2>Las 4 zonas de Git</h2>
     <svg class="diagram" viewBox="0 0 1000 300" role="img" aria-label="Flujo entre directorio de trabajo, staging area, repositorio local y repositorio remoto">
       <defs>
-        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#f05033"/></marker>
-        <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6cb4e4"/></marker>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#ffd60a"/></marker>
+        <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#f5f5f0"/></marker>
       </defs>
       <g font-size="17" text-anchor="middle">
-        <rect x="10"  y="70" width="200" height="110" rx="14" fill="#241f1b" stroke="#3a322c"/>
+        <rect x="10"  y="70" width="200" height="110" rx="14" fill="#1a1a1a" stroke="#333333"/>
         <text x="110" y="118" font-weight="700">Directorio</text><text x="110" y="142" font-weight="700">de trabajo</text>
-        <text x="110" y="205" font-size="13" fill="#a8998b">tus archivos</text>
+        <text x="110" y="205" font-size="13" fill="#a3a3a3">tus archivos</text>
 
-        <rect x="270" y="70" width="200" height="110" rx="14" fill="#241f1b" stroke="#3a322c"/>
+        <rect x="270" y="70" width="200" height="110" rx="14" fill="#1a1a1a" stroke="#333333"/>
         <text x="370" y="118" font-weight="700">Staging</text><text x="370" y="142" font-weight="700">area</text>
-        <text x="370" y="205" font-size="13" fill="#a8998b">lo preparado</text>
+        <text x="370" y="205" font-size="13" fill="#a3a3a3">lo preparado</text>
 
-        <rect x="530" y="70" width="200" height="110" rx="14" fill="#241f1b" stroke="#f05033"/>
+        <rect x="530" y="70" width="200" height="110" rx="14" fill="#1a1a1a" stroke="#ffd60a"/>
         <text x="630" y="118" font-weight="700">Repositorio</text><text x="630" y="142" font-weight="700">local</text>
-        <text x="630" y="205" font-size="13" fill="#a8998b">carpeta .git</text>
+        <text x="630" y="205" font-size="13" fill="#a3a3a3">carpeta .git</text>
 
-        <rect x="790" y="70" width="200" height="110" rx="14" fill="#241f1b" stroke="#6cb4e4"/>
+        <rect x="790" y="70" width="200" height="110" rx="14" fill="#1a1a1a" stroke="#f5f5f0"/>
         <text x="890" y="118" font-weight="700">Repositorio</text><text x="890" y="142" font-weight="700">remoto</text>
-        <text x="890" y="205" font-size="13" fill="#a8998b">GitHub</text>
+        <text x="890" y="205" font-size="13" fill="#a3a3a3">GitHub</text>
       </g>
       <g font-size="15" fill="none" stroke-width="2.5">
-        <path d="M212 95 L268 95" stroke="#f05033" marker-end="url(#ar)"/>
-        <path d="M472 95 L528 95" stroke="#f05033" marker-end="url(#ar)"/>
-        <path d="M732 95 L788 95" stroke="#6cb4e4" marker-end="url(#ab)"/>
-        <path d="M788 155 L732 155" stroke="#6cb4e4" marker-end="url(#ab)"/>
-        <path d="M630 182 C 630 270, 110 270, 110 182" stroke="#a8998b" stroke-dasharray="6 6" marker-end="url(#ar)"/>
+        <path d="M212 95 L268 95" stroke="#ffd60a" marker-end="url(#ar)"/>
+        <path d="M472 95 L528 95" stroke="#ffd60a" marker-end="url(#ar)"/>
+        <path d="M732 95 L788 95" stroke="#f5f5f0" marker-end="url(#ab)"/>
+        <path d="M788 155 L732 155" stroke="#f5f5f0" marker-end="url(#ab)"/>
+        <path d="M630 182 C 630 270, 110 270, 110 182" stroke="#a3a3a3" stroke-dasharray="6 6" marker-end="url(#ar)"/>
       </g>
       <g font-size="16" text-anchor="middle">
-        <text x="240" y="60" fill="#f7a541">add</text>
-        <text x="500" y="60" fill="#f7a541">commit</text>
-        <text x="760" y="60" fill="#6cb4e4">push</text>
-        <text x="760" y="148" fill="#6cb4e4" dy="30">pull</text>
-        <text x="370" y="290" fill="#a8998b">switch / restore</text>
+        <text x="240" y="60" fill="#fff3b0">add</text>
+        <text x="500" y="60" fill="#fff3b0">commit</text>
+        <text x="760" y="60" fill="#f5f5f0">push</text>
+        <text x="760" y="148" fill="#f5f5f0" dy="30">pull</text>
+        <text x="370" y="290" fill="#a3a3a3">switch / restore</text>
       </g>
     </svg>
     <p>Cada comando que veamos mueve cambios de una zona a otra. Si entiendes este dibujo, entiendes Git.</p>
@@ -604,23 +603,23 @@ build/
     <h2>¿Qué es una rama?</h2>
     <svg class="diagram" viewBox="0 0 1000 220" role="img" aria-label="Rama main con una rama nueva que sale de ella y vuelve a unirse con un merge">
       <g stroke-width="4" fill="none">
-        <path d="M40 150 H960" stroke="#f05033"/>
-        <path d="M280 150 C 330 150, 330 60, 380 60 H640 C 690 60, 690 150, 740 150" stroke="#6cb4e4"/>
+        <path d="M40 150 H960" stroke="#ffd60a"/>
+        <path d="M280 150 C 330 150, 330 60, 380 60 H640 C 690 60, 690 150, 740 150" stroke="#f5f5f0"/>
       </g>
-      <g stroke="#14110f" stroke-width="4">
-        <circle cx="80"  cy="150" r="16" fill="#f05033"/>
-        <circle cx="200" cy="150" r="16" fill="#f05033"/>
-        <circle cx="280" cy="150" r="16" fill="#f05033"/>
-        <circle cx="520" cy="150" r="16" fill="#f05033"/>
-        <circle cx="740" cy="150" r="20" fill="#f7a541"/>
-        <circle cx="880" cy="150" r="16" fill="#f05033"/>
-        <circle cx="420" cy="60"  r="16" fill="#6cb4e4"/>
-        <circle cx="560" cy="60"  r="16" fill="#6cb4e4"/>
+      <g stroke="#0a0a0a" stroke-width="4">
+        <circle cx="80"  cy="150" r="16" fill="#ffd60a"/>
+        <circle cx="200" cy="150" r="16" fill="#ffd60a"/>
+        <circle cx="280" cy="150" r="16" fill="#ffd60a"/>
+        <circle cx="520" cy="150" r="16" fill="#ffd60a"/>
+        <circle cx="740" cy="150" r="20" fill="#fff3b0"/>
+        <circle cx="880" cy="150" r="16" fill="#ffd60a"/>
+        <circle cx="420" cy="60"  r="16" fill="#f5f5f0"/>
+        <circle cx="560" cy="60"  r="16" fill="#f5f5f0"/>
       </g>
       <g font-size="18" font-weight="700">
-        <text x="40" y="200" fill="#f05033">main</text>
-        <text x="430" y="28" fill="#6cb4e4">nueva-funcion</text>
-        <text x="700" y="205" fill="#f7a541">merge</text>
+        <text x="40" y="200" fill="#ffd60a">main</text>
+        <text x="430" y="28" fill="#f5f5f0">nueva-funcion</text>
+        <text x="700" y="205" fill="#fff3b0">merge</text>
       </g>
     </svg>
     <p>Una rama es una <strong>línea de desarrollo independiente</strong>. En <code>main</code> está la versión estable; cada función o arreglo se hace en su propia rama y, cuando está lista, se fusiona.</p>
