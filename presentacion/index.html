@@ -544,6 +544,54 @@ a1b2c3d HEAD@{1}: commit: Corrige erratas de la conclusión</span>
     </dl>
   </section>
 
+  <!-- ===================== 04 · GITIGNORE ===================== -->
+  <section class="slide divider">
+    <div class="num">04</div>
+    <h2>Uso de .gitignore</h2>
+    <p class="lead">Lo que nunca debería llegar a un commit.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">04 · .gitignore</div>
+    <h2>Ignorar archivos</h2>
+    <div class="cols">
+      <div>
+        <p>Hay archivos que no queremos guardar: <strong>basura</strong> del sistema, archivos <strong>generados</strong> o <strong>secretos</strong>. Se listan en un archivo <code>.gitignore</code> en la raíz del repo y Git hace como si no existieran: nunca llegan al staging.</p>
+        <div class="warn" style="margin-top:16px"><b>Secretos</b> Contraseñas, tokens y archivos <code>.env</code> siempre en el <code>.gitignore</code>. Lo que se sube a GitHub queda en el historial aunque luego lo borres.</div>
+      </div>
+      <pre class="term"><span class="c"># Comentarios con almohadilla</span>
+<span class="c"># Un archivo concreto</span>
+.env
+
+<span class="c"># Por extensión</span>
+*.log
+
+<span class="c"># Una carpeta entera</span>
+node_modules/
+build/
+
+<span class="c"># En cualquier subcarpeta</span>
+**/.DS_Store
+
+<span class="c"># Excepción: este sí se sube</span>
+!importante.log</pre>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">04 · .gitignore</div>
+    <h2>Si el archivo ya estaba en un commit</h2>
+    <p>Añadirlo al <code>.gitignore</code> no basta: Git ya lo está siguiendo. Hay que sacarlo de la caché:</p>
+    <pre class="term"><span class="p">$</span> echo "secreto.txt" >> .gitignore
+<span class="p">$</span> git rm --cached secreto.txt         <span class="c"># un archivo</span>
+<span class="p">$</span> git rm -r --cached carpeta/          <span class="c"># una carpeta</span>
+<span class="p">$</span> git commit -m "Deja de seguir secreto.txt"
+
+<span class="c"># ¿Por qué se ignora este archivo?</span>
+<span class="p">$</span> git check-ignore -v secreto.txt</pre>
+    <div class="tip"><b>Plantillas</b> GitHub ofrece <code>.gitignore</code> listos para cada lenguaje al crear un repo, y hay muchos más en <a href="https://github.com/github/gitignore">github.com/github/gitignore</a>.</div>
+  </section>
+
   <!-- SLIDES -->
 
 </main>
