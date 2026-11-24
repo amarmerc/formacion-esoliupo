@@ -52,7 +52,7 @@
   h3 { font-size: clamp(18px, 2vw, 24px); margin: 0 0 8px; color: var(--accent-2); }
   p, li, dd { font-size: clamp(16px, 1.75vw, 22px); line-height: 1.5; color: var(--text); }
   p { margin: 0; }
-  .lead { color: var(--muted); font-size: clamp(17px, 2vw, 26px); max-width: 60ch; }
+  .lead { color: var(--muted); font-size: clamp(17px, 2vw, 26px); }
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: 4px 0; }
   li::marker { color: var(--accent); }
@@ -160,6 +160,160 @@
       <dt><code>Ctrl + P</code></dt><dd>Exportar a PDF (una diapositiva por página)</dd>
     </dl>
     <div class="tip"><b>Truco</b> En el móvil desliza a izquierda y derecha. La URL guarda la diapositiva en la que estás (<code>#12</code>).</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Índice</div>
+    <h2>Qué vamos a ver</h2>
+    <div class="cols">
+      <ul>
+        <li><strong>00</strong> · La terminal</li>
+        <li><strong>01</strong> · ¿Qué es Git? Las 4 zonas</li>
+        <li><strong>02</strong> · Primeros pasos y commits</li>
+        <li><strong>03</strong> · Ver y deshacer cambios</li>
+        <li><strong>04</strong> · .gitignore</li>
+        <li><strong>05</strong> · Ramas, merge y conflictos</li>
+      </ul>
+      <ul>
+        <li><strong>06</strong> · Herramientas extra: stash, tags, rebase</li>
+        <li><strong>07</strong> · GitHub: repositorios y licencias</li>
+        <li><strong>08</strong> · Remotos: clone, push, pull, fetch</li>
+        <li><strong>09</strong> · Colaborar: forks, Issues y Pull Requests</li>
+        <li><strong>10</strong> · GitHub Actions y GitHub Pages</li>
+        <li><strong>11</strong> · Interfaces gráficas y buenas prácticas</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== 00 · TERMINAL ===================== -->
+  <section class="slide divider">
+    <div class="num">00</div>
+    <h2>Comandos básicos de terminal</h2>
+    <p class="lead">Git se usa sobre todo desde la terminal: primero aprendemos a movernos por ella.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">00 · Terminal</div>
+    <h2>Moverse y gestionar archivos</h2>
+    <dl class="cmds">
+      <dt><code>pwd</code></dt><dd>Muestra la ruta de la carpeta en la que estás.</dd>
+      <dt><code>ls</code> · <code>ls -la</code></dt><dd>Lista archivos y carpetas (<code>-la</code> incluye los ocultos, como <code>.git</code>).</dd>
+      <dt><code>cd carpeta</code></dt><dd>Entra en la carpeta indicada.</dd>
+      <dt><code>cd ..</code></dt><dd>Sube a la carpeta anterior.</dd>
+      <dt><code>mkdir nombre</code></dt><dd>Crea una carpeta nueva.</dd>
+      <dt><code>touch archivo.txt</code></dt><dd>Crea un archivo vacío con ese nombre y extensión.</dd>
+      <dt><code>nano archivo.txt</code></dt><dd>Abre el archivo para editarlo en la terminal (<code>Ctrl+O</code> guarda, <code>Ctrl+X</code> sale).</dd>
+      <dt><code>cat archivo.txt</code></dt><dd>Muestra el contenido de un archivo.</dd>
+    </dl>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">00 · Terminal</div>
+    <h2>Borrar, limpiar y cancelar</h2>
+    <dl class="cmds">
+      <dt><code>rm archivo</code></dt><dd>Elimina un archivo.</dd>
+      <dt><code>rm -rf carpeta</code></dt><dd>Elimina una carpeta y todo su contenido, <strong>sin pedir confirmación</strong>.</dd>
+      <dt><code>clear</code></dt><dd>Limpia la pantalla de la terminal.</dd>
+      <dt><code>Ctrl + C</code></dt><dd>Cancela el comando que se está ejecutando o escribiendo.</dd>
+      <dt><code>↑</code> <code>↓</code></dt><dd>Recorre los comandos que ya has escrito.</dd>
+      <dt><code>Tab</code></dt><dd>Autocompleta nombres de archivos, carpetas y ramas.</dd>
+    </dl>
+    <div class="warn"><b>Ojo</b> <code>rm</code> no manda nada a la papelera: lo borrado no se recupera… salvo que lo tengas en un commit de Git.</div>
+    <div class="note"><b>Windows</b> Instala <strong>Git for Windows</strong> y usa <em>Git Bash</em>: tendrás estos mismos comandos.</div>
+  </section>
+
+  <!-- ===================== 01 · QUÉ ES GIT ===================== -->
+  <section class="slide divider">
+    <div class="num">01</div>
+    <h2>¿Qué es Git?</h2>
+    <p class="lead">Un sistema de control de versiones distribuido.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">01 · Qué es Git</div>
+    <h2>Una máquina del tiempo para tu proyecto</h2>
+    <div class="cols">
+      <div>
+        <p>Git registra los cambios de tus archivos para que puedas:</p>
+        <ul>
+          <li>Volver a cualquier versión anterior.</li>
+          <li>Saber <strong>quién</strong> cambió <strong>qué</strong>, <strong>cuándo</strong> y <strong>por qué</strong>.</li>
+          <li>Trabajar varias personas a la vez sin pisarse.</li>
+          <li>Probar ideas en ramas sin romper lo que funciona.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Distribuido</h3>
+        <p>Cada persona tiene una <strong>copia completa</strong> del historial en su ordenador. Puedes hacer commits sin Internet y, si el servidor se cae, el proyecto sigue a salvo en cada copia.</p>
+      </div>
+    </div>
+    <div class="note"><b>No confundir</b> <strong>Git</strong> es el programa que guarda versiones. <strong>GitHub</strong> es una web donde alojar repositorios Git y colaborar (otras: GitLab, Bitbucket).</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">01 · Qué es Git</div>
+    <h2>Sin Git vs. con Git</h2>
+    <div class="cols">
+      <div class="card hard">
+        <h3>Sin Git</h3>
+        <pre class="term">trabajo.docx
+trabajo_v2.docx
+trabajo_final.docx
+trabajo_final_DEFINITIVO.docx
+trabajo_final_DEFINITIVO_ahora_si.docx</pre>
+      </div>
+      <div class="card soft">
+        <h3>Con Git</h3>
+        <pre class="term"><span class="o">a1b2c3d</span> Corrige erratas de la conclusión
+<span class="o">9f8e7d6</span> Añade gráfico de resultados
+<span class="o">4c5d6e7</span> Redacta la introducción
+<span class="o">0a1b2c3</span> Crea el documento</pre>
+        <p>Un solo archivo, y cada versión con su explicación.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">01 · Las partes de Git</div>
+    <h2>Las 4 zonas de Git</h2>
+    <svg class="diagram" viewBox="0 0 1000 300" role="img" aria-label="Flujo entre directorio de trabajo, staging area, repositorio local y repositorio remoto">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#f05033"/></marker>
+        <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6cb4e4"/></marker>
+      </defs>
+      <g font-size="17" text-anchor="middle">
+        <rect x="10"  y="70" width="200" height="110" rx="14" fill="#241f1b" stroke="#3a322c"/>
+        <text x="110" y="118" font-weight="700">Directorio</text><text x="110" y="142" font-weight="700">de trabajo</text>
+        <text x="110" y="205" font-size="13" fill="#a8998b">tus archivos</text>
+
+        <rect x="270" y="70" width="200" height="110" rx="14" fill="#241f1b" stroke="#3a322c"/>
+        <text x="370" y="118" font-weight="700">Staging</text><text x="370" y="142" font-weight="700">area</text>
+        <text x="370" y="205" font-size="13" fill="#a8998b">lo preparado</text>
+
+        <rect x="530" y="70" width="200" height="110" rx="14" fill="#241f1b" stroke="#f05033"/>
+        <text x="630" y="118" font-weight="700">Repositorio</text><text x="630" y="142" font-weight="700">local</text>
+        <text x="630" y="205" font-size="13" fill="#a8998b">carpeta .git</text>
+
+        <rect x="790" y="70" width="200" height="110" rx="14" fill="#241f1b" stroke="#6cb4e4"/>
+        <text x="890" y="118" font-weight="700">Repositorio</text><text x="890" y="142" font-weight="700">remoto</text>
+        <text x="890" y="205" font-size="13" fill="#a8998b">GitHub</text>
+      </g>
+      <g font-size="15" fill="none" stroke-width="2.5">
+        <path d="M212 95 L268 95" stroke="#f05033" marker-end="url(#ar)"/>
+        <path d="M472 95 L528 95" stroke="#f05033" marker-end="url(#ar)"/>
+        <path d="M732 95 L788 95" stroke="#6cb4e4" marker-end="url(#ab)"/>
+        <path d="M788 155 L732 155" stroke="#6cb4e4" marker-end="url(#ab)"/>
+        <path d="M630 182 C 630 270, 110 270, 110 182" stroke="#a8998b" stroke-dasharray="6 6" marker-end="url(#ar)"/>
+      </g>
+      <g font-size="16" text-anchor="middle">
+        <text x="240" y="60" fill="#f7a541">add</text>
+        <text x="500" y="60" fill="#f7a541">commit</text>
+        <text x="760" y="60" fill="#6cb4e4">push</text>
+        <text x="760" y="148" fill="#6cb4e4" dy="30">pull</text>
+        <text x="370" y="290" fill="#a8998b">switch / restore</text>
+      </g>
+    </svg>
+    <p>Cada comando que veamos mueve cambios de una zona a otra. Si entiendes este dibujo, entiendes Git.</p>
   </section>
 
   <!-- SLIDES -->
