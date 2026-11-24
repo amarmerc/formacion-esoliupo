@@ -434,6 +434,116 @@ Untracked files:
     <div class="tip"><b>Mira este repo</b> Ejecuta <code>git log</code> aquí: cada commit de esta presentación explica un tema del curso.</div>
   </section>
 
+  <!-- ===================== 03 · DESHACER ===================== -->
+  <section class="slide divider">
+    <div class="num">03</div>
+    <h2>Ver y deshacer cambios</h2>
+    <p class="lead">Volver a versiones anteriores sin miedo.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Comparar</div>
+    <h2>¿Qué he cambiado? <code>git diff</code></h2>
+    <pre class="term"><span class="c"># Cambios aún no preparados (directorio de trabajo vs. staging)</span>
+<span class="p">$</span> git diff
+
+<span class="c"># Cambios ya preparados con git add (lo que entrará en el commit)</span>
+<span class="p">$</span> git diff --staged
+
+<span class="c"># Diferencias entre dos commits o dos ramas</span>
+<span class="p">$</span> git diff 4c5d6e7 9f8e7d6
+<span class="p">$</span> git diff main nueva-funcion</pre>
+    <p>Las líneas con <span style="color:var(--ok)">+</span> se han añadido y las de <span style="color:var(--danger)">−</span> se han eliminado.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Descartar</div>
+    <h2>Descartar cambios sin commit: <code>git restore</code></h2>
+    <dl class="cmds">
+      <dt><code>git restore archivo</code></dt><dd>Descarta lo que has editado y lo deja como en el último commit.</dd>
+      <dt><code>git restore .</code></dt><dd>Descarta todos los cambios no preparados.</dd>
+      <dt><code>git restore --staged archivo</code></dt><dd>Lo saca del staging, sin tocar tus ediciones.</dd>
+      <dt><code>git restore --source 4c5d6e7 archivo</code></dt><dd>Recupera un archivo tal y como estaba en un commit anterior.</dd>
+    </dl>
+    <div class="warn"><b>Cuidado</b> Lo descartado con <code>git restore</code> nunca estuvo en un commit, así que no se puede recuperar.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Viajar en el tiempo</div>
+    <h2>Ver versiones anteriores</h2>
+    <pre class="term"><span class="c"># Moverte a un commit antiguo para mirarlo (sin borrar nada)</span>
+<span class="p">$</span> git switch --detach 4c5d6e7     <span class="c"># antes: git checkout 4c5d6e7</span>
+<span class="o">HEAD is now at 4c5d6e7 Crea la página de inicio</span>
+
+<span class="c"># Volver al presente</span>
+<span class="p">$</span> git switch main                 <span class="c"># antes: git checkout main</span></pre>
+    <div class="note"><b>Detached HEAD</b> Cuando visitas un commit antiguo, HEAD no apunta a ninguna rama. Puedes mirar y probar, pero si quieres guardar cambios crea una rama: <code>git switch -c rescate</code>.</div>
+    <div class="tip"><b>switch y restore</b> Desde Git 2.23 <code>git checkout</code> se dividió en dos comandos más claros: <code>switch</code> (moverse entre ramas y commits) y <code>restore</code> (recuperar archivos). <code>checkout</code> sigue funcionando.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Revert</div>
+    <h2>Deshacer un commit de forma segura: <code>git revert</code></h2>
+    <div class="cols">
+      <div>
+        <p>Crea un <strong>commit nuevo</strong> que hace lo contrario del commit indicado, como un <code>Ctrl+Z</code> que queda registrado.</p>
+        <pre class="term" style="margin-top:14px"><span class="p">$</span> git revert 9f8e7d6
+<span class="p">$</span> git revert 9f8e7d6 --no-edit</pre>
+      </div>
+      <div class="card soft">
+        <h3>Úsalo en lo ya compartido</h3>
+        <p>No reescribe el historial, así que es la forma correcta de deshacer algo que ya has subido a GitHub.</p>
+        <p style="margin-top:10px;color:var(--muted)">Si se abre el editor Vim: pulsa <code>Esc</code>, escribe <code>:wq</code> y <code>Enter</code>. Con <code>--no-edit</code> no se abre.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Reset</div>
+    <h2>Volver atrás borrando commits: <code>git reset</code></h2>
+    <p>Mueve la rama a un commit anterior y "olvida" los posteriores. Hay tres modos:</p>
+    <div class="cols-3">
+      <div class="card hard">
+        <h3>--hard</h3>
+        <p>El más brutal. Borra los commits <strong>y</strong> todos los cambios en los archivos.</p>
+      </div>
+      <div class="card mid">
+        <h3>--mixed <span class="badge">por defecto</span></h3>
+        <p>Borra los commits, pero los archivos se quedan editados y <strong>sin</strong> añadir al staging.</p>
+      </div>
+      <div class="card soft">
+        <h3>--soft</h3>
+        <p>El más seguro. Borra los commits y deja los cambios <strong>en el staging</strong>, como si hubieras hecho <code>git add .</code></p>
+      </div>
+    </div>
+    <pre class="term"><span class="p">$</span> git reset --soft HEAD~1   <span class="c"># deshace el último commit (HEAD~1 = uno antes de HEAD)</span></pre>
+    <div class="warn"><b>Regla de oro</b> No uses <code>reset</code> sobre commits que ya hayas subido a GitHub: usa <code>revert</code>.</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Red de seguridad</div>
+    <h2>"La he liado": <code>git reflog</code></h2>
+    <pre class="term"><span class="p">$</span> git reset --hard HEAD~3        <span class="c"># ¡ups! adiós a 3 commits</span>
+<span class="p">$</span> git reflog
+<span class="o">4c5d6e7 HEAD@{0}: reset: moving to HEAD~3
+a1b2c3d HEAD@{1}: commit: Corrige erratas de la conclusión</span>
+<span class="p">$</span> git reset --hard a1b2c3d        <span class="c"># y vuelven</span></pre>
+    <p><code>reflog</code> apunta cada movimiento de HEAD en tu ordenador durante unos 90 días. Casi todo lo que llegó a estar en un commit se puede recuperar.</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">03 · Resumen</div>
+    <h2>¿Qué comando uso para deshacer?</h2>
+    <dl class="cmds">
+      <dt>Editado, sin <code>add</code></dt><dd><code>git restore archivo</code></dd>
+      <dt>Ya con <code>add</code></dt><dd><code>git restore --staged archivo</code></dd>
+      <dt>Último commit, no subido</dt><dd><code>git commit --amend</code> o <code>git reset --soft HEAD~1</code></dd>
+      <dt>Commit ya subido</dt><dd><code>git revert hash</code></dd>
+      <dt>Solo quiero mirar</dt><dd><code>git switch --detach hash</code></dd>
+      <dt>Algo se ha perdido</dt><dd><code>git reflog</code></dd>
+    </dl>
+  </section>
+
   <!-- SLIDES -->
 
 </main>
